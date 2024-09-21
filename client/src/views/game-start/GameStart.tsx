@@ -12,13 +12,13 @@ const GameStart: FC<GameStartProps> = ({ onSelectLevel }) => {
       <h1>Let's Play Hangman!</h1>
       <h2>Level</h2>
       <Link to={"/board"}>
-        <button onClick={() => onSelectLevel("Easy")}>Easy</button>
+        <button onClick={() => onSelectLevel("Easy")}><span>Easy</span></button>
       </Link>
       <Link to={"/board"}>
-        <button onClick={() => onSelectLevel("Medium")}>Medium</button>
+        <button onClick={() => onSelectLevel("Medium")}><span>Medium</span></button>
       </Link>
       <Link to={"/board"}>
-        <button onClick={() => onSelectLevel("Difficult")}>Dufficult</button>
+        <button onClick={() => onSelectLevel("Difficult")}><span>Difficult</span></button>
       </Link>
     </>
   );
