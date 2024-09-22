@@ -1,9 +1,19 @@
 import { type FC } from "react";
 
-const Board: FC = () => {
+type BoardProps = {
+  level: string;
+  playedWord: string;
+};
+
+const Board: FC<BoardProps> = ({ level, playedWord }) => {
+  console.log(playedWord);
+
   return (
-    <h1>Board</h1>
-  )
+    <>
+      <h1>Hangman</h1>
+      <h2>Level {level}</h2>
+    </>
+  );
 };
 
 export default Board;

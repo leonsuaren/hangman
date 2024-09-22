@@ -23,7 +23,12 @@ export const WordsLevelEasy = [
   "life",
   "city",
   "face",
-  "gold"
+  "gold",
+  "kick",
+  "nose",
+  "bell",
+  "card",
+  "bird",
 ];
 
 export const WordsLevelMedium = [
@@ -52,6 +57,11 @@ export const WordsLevelMedium = [
   "heart",
   "coffee",
   "horse",
+  "clock",
+  "giant",
+  "dream",
+  "lucky",
+  "novel",
 ];
 
 export const WordsLevelDifficult = [
@@ -80,4 +90,9 @@ export const WordsLevelDifficult = [
   "weekend",
   "strategy",
   "website",
+  "channel",
+  "desktop",
+  "forever",
+  "history",
+  "mystery",
 ];
