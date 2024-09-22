@@ -5,6 +5,8 @@ import { useState } from "react";
 import GameStart from "./views/game-start/GameStart.tsx";
 import Board from "./views/board/Board.tsx";
 
+import { WordsLevelEasy } from './utils/words.ts';
+
 import "./App.css";
 
 function App() {
@@ -13,7 +15,7 @@ function App() {
   const handleOnSelectLevel = (level: string) => {
     setLevel(level);
   }
-  console.log(level);
+  console.log(WordsLevelEasy);
 
   return (
     <>
