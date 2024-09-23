@@ -18,21 +18,24 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
     event.preventDefault();
     let letter = guessLetter.current?.value;
     if (lettersSet.indexOf(letter!) < 0) {
-      setLettersSet((prevState) => 
-       [...prevState, letter!]
-      );
-    } 
+      setLettersSet((prevState) => [...prevState, letter!]);
+    }
     if (lettersSet.indexOf(letter!) >= 0) {
-      // setLettersSet(prevState => prevState)
       setMessage("You entered that letter already");
       setTimeout(() => {
-        setMessage('');
-      }, 3000)
+        setMessage("");
+      }, 3000);
     }
     setLetter(letter);
-    if (playedWordGame.indexOf(letter!) >= 0 && lettersSet.indexOf(letter!) < 0) {
+    if (
+      playedWordGame.indexOf(letter!) >= 0 &&
+      lettersSet.indexOf(letter!) < 0
+    ) {
       setLetterExist((prevState) => prevState + 1);
-    } else if (playedWordGame.indexOf(letter!) === -1 && lettersSet.indexOf(letter!) < 0) {
+    } else if (
+      playedWordGame.indexOf(letter!) === -1 &&
+      lettersSet.indexOf(letter!) < 0
+    ) {
       setErrors((prevState) => prevState + 1);
     }
   };
@@ -49,26 +52,46 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
     <>
       <h1>Hangman</h1>
       <h2>Level {level}</h2>
-      <form onSubmit={handleOnSubmit}>
-        <label>Guess Letter</label>
-        <input
-          type="text"
-          id="letter"
-          ref={guessLetter}
-          maxLength={1}
-          disabled={
-            errors === 3 ? true : false || letterExist === 2 ? true : false
-          }
-        />
-        <button
-          disabled={
-            errors === 3 ? true : false || letterExist === 2 ? true : false
-          }
-        >
-          Guess Letter
-        </button>
-        <p>{message}</p>
-      </form>
+      <section className="board-layout">
+        <div className="restar-game">
+          <button><span>Restar Game</span></button>
+        </div>
+        <div className="reset-game">
+          <button><span>Reset Game</span></button>
+        </div>
+        <div className="guess-word">
+          <h2>Guess Word</h2>
+        </div>
+        <form onSubmit={handleOnSubmit} className="guess-letter-form">
+          <label>Guess Letter</label>
+          <input
+            type="text"
+            id="letter"
+            ref={guessLetter}
+            maxLength={1}
+            disabled={
+              errors === 3 ? true : false || letterExist === 2 ? true : false
+            }
+          />
+          <button
+            disabled={
+              errors === 3 ? true : false || letterExist === 2 ? true : false
+            }
+          >
+            Guess Letter
+          </button>
+          <p>{message}</p>
+        </form>
+        <form className="guess-word-form">
+          <input type="text"/>
+        </form>
+        <div className="messages">
+          <h2>Messages</h2>
+        </div>
+        <div className="statistics">
+          <h2>Estatistics</h2>
+        </div>
+      </section>
     </>
   );
 };

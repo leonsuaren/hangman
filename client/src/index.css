@@ -72,3 +72,39 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.board-layout {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
+
+.restar-game {
+  grid-area: 1 / 1 / 3 / 3;
+}
+
+.reset-game {
+  grid-area: 1 / 9 / 3 / 11;
+}
+
+.guess-word {
+  grid-area: 3 / 2 / 4 / 10;
+}
+
+.guess-letter-form {
+  grid-area: 4 / 2 / 8 / 6;
+}
+
+.guess-word-form {
+  grid-area: 4 / 6 / 8 / 10;
+}
+
+.messages {
+  grid-area: 8 / 3 / 9 / 9;
+}
+
+.statistics {
+  grid-area: 9 / 3 / 11 / 9;
+}
