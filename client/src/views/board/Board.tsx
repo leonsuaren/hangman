@@ -6,10 +6,9 @@ type BoardProps = {
 };
 
 const Board: FC<BoardProps> = ({ level, playedWord }) => {
-  const [letter, setLetter] = useState<string | undefined>("");
   const [errors, setErrors] = useState<number>(0);
-  const [lettersSet, setLettersSet] = useState<string[]>([]);
   const [letterExist, setLetterExist] = useState<number>(0);
+  const [lettersSet, setLettersSet] = useState<string[]>([]);
   const [message, setMessage] = useState<string>("");
   const guessLetter = useRef<HTMLInputElement>(null);
   const playedWordGame = [...playedWord];
@@ -17,6 +16,7 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
   const handleOnSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     let letter = guessLetter.current?.value;
+
     if (lettersSet.indexOf(letter!) < 0) {
       setLettersSet((prevState) => [...prevState, letter!]);
     }
@@ -26,7 +26,6 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
         setMessage("");
       }, 3000);
     }
-    setLetter(letter);
     if (
       playedWordGame.indexOf(letter!) >= 0 &&
       lettersSet.indexOf(letter!) < 0
@@ -38,14 +37,15 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
     ) {
       setErrors((prevState) => prevState + 1);
     }
+    event.currentTarget.reset();
   };
   console.log({
-    letter: letter,
+    level: level,
     playedWord: playedWord,
     Errors: errors,
     letterExist: letterExist,
     letterSet: lettersSet,
-    message: message,
+    message: message
   });
 
   return (

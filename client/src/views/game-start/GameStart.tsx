@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { type FC } from "react";
 
 type GameStartProps = {
-  onSelectLevel: (level: string) => void;
+  onSelectLevel: (level: 'Easy' | 'Medium' | 'Difficult') => void;
 };
 
 const GameStart: FC<GameStartProps> = ({ onSelectLevel }) => {
