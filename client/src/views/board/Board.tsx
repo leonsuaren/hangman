@@ -11,6 +11,7 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
   const [lettersSet, setLettersSet] = useState<string[]>([]);
   const [maxLetterExist, setMaxLetterExist] = useState<number>(2);
   const [message, setMessage] = useState<string>("");
+  const [evaluateResponse, setEvaluateResponse] = useState<string[]>([]);
   const guessLetter = useRef<HTMLInputElement>(null);
   const playedWordGame = [...playedWord];
 
@@ -53,18 +54,27 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
         setMessage("");
       }, 3000);
     }
-    //
 
     if (
       playedWordGame.indexOf(letter!) !== -1 &&
       lettersSet.indexOf(letter!) === -1
     ) {
       setLetterExist((prevState) => prevState + 1);
+      setMessage(`The letter '${letter}' exist in the guessed word!`);
+      setEvaluateResponse(prevState => [...prevState, 'Y']);
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
     } else if (
       playedWordGame.indexOf(letter!) === -1 &&
       lettersSet.indexOf(letter!) === -1
     ) {
       setErrors((prevState) => prevState + 1);
+      setMessage(`The letter '${letter}' does not exist in the guessed word!`);
+      setEvaluateResponse(prevState => [...prevState, 'X']);
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
     }
 
     event.currentTarget.reset();
@@ -76,6 +86,7 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
     letterExist: letterExist,
     letterSet: lettersSet,
     message: message,
+    evaluateResponse: evaluateResponse
   });
 
   return (
@@ -124,8 +135,18 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
               Guess Letter
             </button>
           </form>
-          <div className="errors-and-correct"><h2>errors and correct</h2></div>
-          <div className="guessed-letter-messages"><h3>{message}</h3></div>
+          <div className="errors-and-correct">
+            {
+              evaluateResponse.map((response, key) => {
+                return (
+                  <h2 key={key}>{response}</h2>
+                )
+              })
+            }
+          </div>
+          <div className="guessed-letter-messages">
+            <h3>{message}</h3>
+          </div>
         </section>
         <form className="guess-word-form">
           <input type="text" />

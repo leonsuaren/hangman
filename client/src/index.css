@@ -124,6 +124,9 @@ button:focus-visible {
 }
 
 .errors-and-correct {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
   grid-area: 3 / 1 / 4 / 5;
 }
 
