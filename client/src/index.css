@@ -125,9 +125,23 @@ button:focus-visible {
 
 .errors-and-correct {
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: row;
   width: 100%;
   grid-area: 3 / 1 / 4 / 5;
+}
+
+.letter-not-in-word {
+  font-size: 2rem;
+  color: red;
+  margin: 10px;
+}
+
+.letter-in-word {
+  font-size: 2rem;
+  color: green;
+  margin: 10px;
 }
 
 .guessed-letter-messages {

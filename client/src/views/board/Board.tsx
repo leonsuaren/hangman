@@ -61,7 +61,7 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
     ) {
       setLetterExist((prevState) => prevState + 1);
       setMessage(`The letter '${letter}' exist in the guessed word!`);
-      setEvaluateResponse(prevState => [...prevState, 'Y']);
+      setEvaluateResponse((prevState) => [...prevState, "Y"]);
       setTimeout(() => {
         setMessage("");
       }, 3000);
@@ -71,7 +71,7 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
     ) {
       setErrors((prevState) => prevState + 1);
       setMessage(`The letter '${letter}' does not exist in the guessed word!`);
-      setEvaluateResponse(prevState => [...prevState, 'X']);
+      setEvaluateResponse((prevState) => [...prevState, "X"]);
       setTimeout(() => {
         setMessage("");
       }, 3000);
@@ -86,7 +86,7 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
     letterExist: letterExist,
     letterSet: lettersSet,
     message: message,
-    evaluateResponse: evaluateResponse
+    evaluateResponse: evaluateResponse,
   });
 
   return (
@@ -136,16 +136,19 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
             </button>
           </form>
           <div className="errors-and-correct">
-            {
-              evaluateResponse.map((response, key) => {
+            {evaluateResponse.map((response, key) => {
+              if (response === "X") {
+                return <p key={key} className="letter-not-in-word">{response}</p>;
+              } else {
                 return (
-                  <h2 key={key}>{response}</h2>
+                  <p key={key} className="letter-in-word">&#10003;</p>
                 )
-              })
-            }
+              }
+
+            })}
           </div>
           <div className="guessed-letter-messages">
-            <h3>{message}</h3>
+            <p>{message}</p>
           </div>
         </section>
         <form className="guess-word-form">
