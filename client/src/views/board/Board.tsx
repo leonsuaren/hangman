@@ -122,6 +122,7 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
                   ? true
                   : false
               }
+              className="letter-input"
             />
             <button
               disabled={
@@ -132,30 +133,34 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
                   : false
               }
             >
-              Guess Letter
+              Send
             </button>
           </form>
           <div className="errors-and-correct">
             {evaluateResponse.map((response, key) => {
               if (response === "X") {
-                return <p key={key} className="letter-not-in-word">{response}</p>;
+                return (
+                  <p key={key} className="letter-not-in-word">
+                    {response}
+                  </p>
+                );
               } else {
                 return (
-                  <p key={key} className="letter-in-word">&#10003;</p>
-                )
+                  <p key={key} className="letter-in-word">
+                    &#10003;
+                  </p>
+                );
               }
-
             })}
           </div>
-          <div className="guessed-letter-messages">
-            <p>{message}</p>
+          <div>
           </div>
         </section>
         <form className="guess-word-form">
           <input type="text" />
         </form>
         <div className="messages">
-          <h2>Messages</h2>
+          <p>{message}</p>
         </div>
         <div className="statistics">
           <h2>Estatistics</h2>
