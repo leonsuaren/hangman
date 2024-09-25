@@ -8,17 +8,22 @@ type BoardProps = {
 };
 
 const Board: FC<BoardProps> = ({ level, playedWord }) => {
+  //handle the letter
   const [errors, setErrors] = useState<number>(0);
   const [letterExist, setLetterExist] = useState<number>(0);
   const [lettersSet, setLettersSet] = useState<string[]>([]);
   const [maxLetterExist, setMaxLetterExist] = useState<number>(2);
   const [message, setMessage] = useState<{ type: string; message: string }>({
-    type: " " || "information" || "warning" || "play",
+    type: " " || "information" || "warning" || "success" || "fail",
     message: "",
   });
   const [evaluateResponse, setEvaluateResponse] = useState<string[]>([]);
   const guessLetter = useRef<HTMLInputElement>(null);
   const playedWordGame = [...playedWord];
+  //handle the letter
+  //handle the word
+  const guessWord = useRef<HTMLInputElement>(null);
+  //handle the word
 
   useEffect(() => {
     if (level === "Medium") {
@@ -50,7 +55,7 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
     }
   }, [errors, letterExist]);
 
-  const handleOnSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleOnGuessLetter = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     let letter = guessLetter.current?.value;
 
@@ -97,6 +102,23 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
 
     event.currentTarget.reset();
   };
+
+  const handleOnGuessWord = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    let word = guessWord.current?.value;
+    if (word === playedWord) {
+      setMessage({type: "success", message: "Congratulations you guessed the word"});
+      setTimeout(() => {
+        setMessage({ type: "", message: "" });
+      }, 3000);
+    } else {
+      setMessage({type: "fail", message: "Game Over"})
+      setTimeout(() => {
+        setMessage({ type: "", message: "" });
+      }, 3000);
+    }
+    event.currentTarget.reset();
+  }
   console.log({
     level: level,
     playedWord: playedWord,
@@ -128,11 +150,12 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
           <h2>Guess Word</h2>
         </div>
         <section className="guess-letter-form guess-letter-layout">
-          <form onSubmit={handleOnSubmit} className="form-layout">
-            <label>Guess Letter</label>
+          <form onSubmit={handleOnGuessLetter} className="form-layout">
+            <label htmlFor="letter">Guess Letter</label>
             <input
               type="text"
               id="letter"
+              name="letter"
               ref={guessLetter}
               maxLength={1}
               disabled={
@@ -175,8 +198,10 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
           </div>
           <div></div>
         </section>
-        <form className="guess-word-form">
-          <input type="text" />
+        <form className="guess-word-form" onSubmit={handleOnGuessWord}>
+        <label htmlFor="letter">Guess the Word!</label>
+          <input className="guess-letter-input" type="text" name="word" ref={guessWord}/>
+          <button>Good Lock!</button>
         </form>
         <div className="messages">
           <div
@@ -185,8 +210,10 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
                 ? "information-message"
                 : message.type === "warning"
                 ? "warning-message"
-                : message.type === "play"
-                ? "play-message"
+                : message.type === "success"
+                ? "success-message"
+                : message.type === "fail"
+                ? "game-over-message"
                 : "default"
             }
           >
