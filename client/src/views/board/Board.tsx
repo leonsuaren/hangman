@@ -24,16 +24,18 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
     }
 
     if (errors === 3) {
-      setMessage('You reached the maximum errors!');
+      setMessage("You reached the maximum errors!");
       setTimeout(() => {
-        setMessage('');
+        setMessage("");
       }, 3000);
     }
 
     if (letterExist === maxLetterExist) {
-      setMessage(`You reached the maximum number of correct answers ${maxLetterExist}!`);
+      setMessage(
+        `You reached the maximum number of correct answers ${maxLetterExist}!`
+      );
       setTimeout(() => {
-        setMessage('');
+        setMessage("");
       }, 3000);
     }
   }, [errors, letterExist]);
@@ -42,7 +44,6 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
     event.preventDefault();
     let letter = guessLetter.current?.value;
 
-    //regla general para cualquier nivel de juego, easy, medium and difficult
     if (lettersSet.indexOf(letter!) === -1) {
       setLettersSet((prevState) => [...prevState, letter!]);
     }
@@ -95,34 +96,37 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
         <div className="guess-word">
           <h2>Guess Word</h2>
         </div>
-        <form onSubmit={handleOnSubmit} className="guess-letter-form">
-          <label>Guess Letter</label>
-          <input
-            type="text"
-            id="letter"
-            ref={guessLetter}
-            maxLength={1}
-            disabled={
-              errors === 3
-                ? true
-                : false || letterExist === maxLetterExist
-                ? true
-                : false
-            }
-          />
-          <button
-            disabled={
-              errors === 3
-                ? true
-                : false || letterExist === maxLetterExist
-                ? true
-                : false
-            }
-          >
-            Guess Letter
-          </button>
-          <p>{message}</p>
-        </form>
+        <section className="guess-letter-form guess-letter-layout">
+          <form onSubmit={handleOnSubmit} className="form-layout">
+            <label>Guess Letter</label>
+            <input
+              type="text"
+              id="letter"
+              ref={guessLetter}
+              maxLength={1}
+              disabled={
+                errors === 3
+                  ? true
+                  : false || letterExist === maxLetterExist
+                  ? true
+                  : false
+              }
+            />
+            <button
+              disabled={
+                errors === 3
+                  ? true
+                  : false || letterExist === maxLetterExist
+                  ? true
+                  : false
+              }
+            >
+              Guess Letter
+            </button>
+          </form>
+          <div className="errors-and-correct"><h2>errors and correct</h2></div>
+          <div className="guessed-letter-messages"><h3>{message}</h3></div>
+        </section>
         <form className="guess-word-form">
           <input type="text" />
         </form>
