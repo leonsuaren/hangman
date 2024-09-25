@@ -1,5 +1,7 @@
 import { type FC, type FormEvent, useRef, useState, useEffect } from "react";
 
+import { Link } from "react-router-dom";
+
 type BoardProps = {
   level: string;
   playedWord: string;
@@ -10,7 +12,10 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
   const [letterExist, setLetterExist] = useState<number>(0);
   const [lettersSet, setLettersSet] = useState<string[]>([]);
   const [maxLetterExist, setMaxLetterExist] = useState<number>(2);
-  const [message, setMessage] = useState<string>("");
+  const [message, setMessage] = useState<{ type: string; message: string }>({
+    type: " " || "information" || "warning" || "play",
+    message: "",
+  });
   const [evaluateResponse, setEvaluateResponse] = useState<string[]>([]);
   const guessLetter = useRef<HTMLInputElement>(null);
   const playedWordGame = [...playedWord];
@@ -25,18 +30,22 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
     }
 
     if (errors === 3) {
-      setMessage("You reached the maximum errors!");
+      setMessage({
+        type: "warning",
+        message: "You reached the maximum errors!",
+      });
       setTimeout(() => {
-        setMessage("");
+        setMessage({ type: "", message: "" });
       }, 3000);
     }
 
     if (letterExist === maxLetterExist) {
-      setMessage(
-        `You reached the maximum number of correct answers ${maxLetterExist}!`
-      );
+      setMessage({
+        type: "information",
+        message: `You reached the maximum number of correct answers ${maxLetterExist}!`,
+      });
       setTimeout(() => {
-        setMessage("");
+        setMessage({ type: "", message: "" });
       }, 3000);
     }
   }, [errors, letterExist]);
@@ -49,9 +58,12 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
       setLettersSet((prevState) => [...prevState, letter!]);
     }
     if (lettersSet.indexOf(letter!) !== -1) {
-      setMessage("You entered that letter already");
+      setMessage({
+        type: "information",
+        message: "You entered that letter already",
+      });
       setTimeout(() => {
-        setMessage("");
+        setMessage({ type: "", message: "" });
       }, 3000);
     }
 
@@ -60,20 +72,26 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
       lettersSet.indexOf(letter!) === -1
     ) {
       setLetterExist((prevState) => prevState + 1);
-      setMessage(`The letter '${letter}' exist in the guessed word!`);
+      setMessage({
+        type: "information",
+        message: `The letter '${letter}' exist in the guessed word!`,
+      });
       setEvaluateResponse((prevState) => [...prevState, "Y"]);
       setTimeout(() => {
-        setMessage("");
+        setMessage({ type: "", message: "" });
       }, 3000);
     } else if (
       playedWordGame.indexOf(letter!) === -1 &&
       lettersSet.indexOf(letter!) === -1
     ) {
       setErrors((prevState) => prevState + 1);
-      setMessage(`The letter '${letter}' does not exist in the guessed word!`);
+      setMessage({
+        type: "warning",
+        message: `The letter '${letter}' does not exist in the guessed word!`,
+      });
       setEvaluateResponse((prevState) => [...prevState, "X"]);
       setTimeout(() => {
-        setMessage("");
+        setMessage({ type: "", message: "" });
       }, 3000);
     }
 
@@ -95,9 +113,11 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
       <h2>Level {level}</h2>
       <section className="board-layout">
         <div className="restar-game">
-          <button>
-            <span>Restar Game</span>
-          </button>
+          <Link to="/">
+            <button>
+              <span>Restar Game</span>
+            </button>
+          </Link>
         </div>
         <div className="reset-game">
           <button>
@@ -153,14 +173,25 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
               }
             })}
           </div>
-          <div>
-          </div>
+          <div></div>
         </section>
         <form className="guess-word-form">
           <input type="text" />
         </form>
         <div className="messages">
-          <p>{message}</p>
+          <div
+            className={
+              message.type === "information"
+                ? "information-message"
+                : message.type === "warning"
+                ? "warning-message"
+                : message.type === "play"
+                ? "play-message"
+                : "default"
+            }
+          >
+            <p>{message.message}</p>
+          </div>
         </div>
         <div className="statistics">
           <h2>Estatistics</h2>
