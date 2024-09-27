@@ -1,6 +1,7 @@
 import { type FC, type FormEvent, useRef, useState, useEffect } from "react";
 
 import { Link } from "react-router-dom";
+import WordSetDisplay from "../../components/word-set-display/WordSetDisplay";
 
 type BoardProps = {
   level: string;
@@ -8,36 +9,42 @@ type BoardProps = {
 };
 
 const Board: FC<BoardProps> = ({ level, playedWord }) => {
+  const playedWordGame = [...playedWord];
   //handle the letter
-  const [errors, setErrors] = useState<number>(0);
+  const [letterErrors, setLetterErrors] = useState<number>(0);
   const [letterExist, setLetterExist] = useState<number>(0);
   const [lettersSet, setLettersSet] = useState<string[]>([]);
   const [maxLetterExist, setMaxLetterExist] = useState<number>(2);
+  const [evaluateLetterResponse, setEvaluateLetterResponse] = useState<
+    string[]
+  >([]);
+  const guessLetter = useRef<HTMLInputElement>(null);
+  //handle the letter
+  //handle the word
+  const guessWord = useRef<HTMLInputElement>(null);
+  const [maxWordAttempts, setMaxWordAttempts] = useState<number>(1);
+  const [wordErrors, setwordErrors] = useState<number>(0);
+  //handle the word
   const [message, setMessage] = useState<{ type: string; message: string }>({
     type: " " || "information" || "warning" || "success" || "fail",
     message: "",
   });
-  const [evaluateResponse, setEvaluateResponse] = useState<string[]>([]);
-  const guessLetter = useRef<HTMLInputElement>(null);
-  const playedWordGame = [...playedWord];
-  //handle the letter
-  //handle the word
-  const guessWord = useRef<HTMLInputElement>(null);
-  //handle the word
 
   useEffect(() => {
     if (level === "Medium") {
       setMaxLetterExist(3);
+      setMaxWordAttempts(2);
     }
 
     if (level === "Difficult") {
       setMaxLetterExist(4);
+      setMaxWordAttempts(3);
     }
 
-    if (errors === 3) {
+    if (letterErrors === 3) {
       setMessage({
         type: "warning",
-        message: "You reached the maximum errors!",
+        message: "You reached the maximum mistakes!",
       });
       setTimeout(() => {
         setMessage({ type: "", message: "" });
@@ -53,7 +60,7 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
         setMessage({ type: "", message: "" });
       }, 3000);
     }
-  }, [errors, letterExist]);
+  }, [letterErrors, letterExist]);
 
   const handleOnGuessLetter = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -81,7 +88,7 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
         type: "information",
         message: `The letter '${letter}' exist in the guessed word!`,
       });
-      setEvaluateResponse((prevState) => [...prevState, "Y"]);
+      setEvaluateLetterResponse((prevState) => [...prevState, "Y"]);
       setTimeout(() => {
         setMessage({ type: "", message: "" });
       }, 3000);
@@ -89,12 +96,12 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
       playedWordGame.indexOf(letter!) === -1 &&
       lettersSet.indexOf(letter!) === -1
     ) {
-      setErrors((prevState) => prevState + 1);
+      setLetterErrors((prevState) => prevState + 1);
       setMessage({
         type: "warning",
         message: `The letter '${letter}' does not exist in the guessed word!`,
       });
-      setEvaluateResponse((prevState) => [...prevState, "X"]);
+      setEvaluateLetterResponse((prevState) => [...prevState, "X"]);
       setTimeout(() => {
         setMessage({ type: "", message: "" });
       }, 3000);
@@ -107,27 +114,35 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
     event.preventDefault();
     let word = guessWord.current?.value;
     if (word === playedWord) {
-      setMessage({type: "success", message: "Congratulations you guessed the word"});
+      setMessage({
+        type: "success",
+        message: "Congratulations you guessed the word",
+      });
       setTimeout(() => {
         setMessage({ type: "", message: "" });
       }, 3000);
     } else {
-      setMessage({type: "fail", message: "Game Over"})
+      setwordErrors((prevState) => prevState + 1);
+    }
+    if (maxWordAttempts === wordErrors) {
+      setMessage({ type: "fail", message: "Game Over" });
       setTimeout(() => {
         setMessage({ type: "", message: "" });
       }, 3000);
     }
     event.currentTarget.reset();
-  }
-  console.log({
-    level: level,
-    playedWord: playedWord,
-    Errors: errors,
-    letterExist: letterExist,
-    letterSet: lettersSet,
-    message: message,
-    evaluateResponse: evaluateResponse,
-  });
+  };
+  // console.log({
+  //   level: level,
+  //   playedWord: playedWord,
+  //   letterErrors: letterErrors,
+  //   letterExist: letterExist,
+  //   letterSet: lettersSet,
+  //   message: message,
+  //   evaluateLetterResponse: evaluateLetterResponse,
+  //   maxWordAttempts: maxWordAttempts,
+  //   wordErrors: wordErrors,
+  // });
 
   return (
     <>
@@ -147,7 +162,7 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
           </button>
         </div>
         <div className="guess-word">
-          <h2>Guess Word</h2>
+          <WordSetDisplay playedWord={playedWordGame} lettersSet={lettersSet}/>
         </div>
         <section className="guess-letter-form guess-letter-layout">
           <form onSubmit={handleOnGuessLetter} className="form-layout">
@@ -159,9 +174,11 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
               ref={guessLetter}
               maxLength={1}
               disabled={
-                errors === 3
+                letterErrors === 3
                   ? true
                   : false || letterExist === maxLetterExist
+                  ? true
+                  : maxWordAttempts === wordErrors
                   ? true
                   : false
               }
@@ -169,9 +186,11 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
             />
             <button
               disabled={
-                errors === 3
+                letterErrors === 3
                   ? true
                   : false || letterExist === maxLetterExist
+                  ? true
+                  : maxWordAttempts === wordErrors
                   ? true
                   : false
               }
@@ -180,7 +199,7 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
             </button>
           </form>
           <div className="errors-and-correct">
-            {evaluateResponse.map((response, key) => {
+            {evaluateLetterResponse.map((response, key) => {
               if (response === "X") {
                 return (
                   <p key={key} className="letter-not-in-word">
@@ -199,9 +218,31 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
           <div></div>
         </section>
         <form className="guess-word-form" onSubmit={handleOnGuessWord}>
-        <label htmlFor="letter">Guess the Word!</label>
-          <input className="guess-letter-input" type="text" name="word" ref={guessWord}/>
-          <button>Good Lock!</button>
+          <label htmlFor="letter">Guess the Word!</label>
+          <input
+            className="guess-letter-input"
+            type="text"
+            name="word"
+            ref={guessWord}
+            disabled={
+              maxWordAttempts === wordErrors
+                ? true
+                : lettersSet.length === 0
+                ? true
+                : false
+            }
+          />
+          <button
+            disabled={
+              maxWordAttempts === wordErrors
+                ? true
+                : lettersSet.length === 0
+                ? true
+                : false
+            }
+          >
+            Good Lock!
+          </button>
         </form>
         <div className="messages">
           <div
