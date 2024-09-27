@@ -10,6 +10,7 @@ type BoardProps = {
 
 const Board: FC<BoardProps> = ({ level, playedWord }) => {
   const playedWordGame = [...playedWord];
+  const [letter, setLetter] = useState<string | undefined>('');
   //handle the letter
   const [letterErrors, setLetterErrors] = useState<number>(0);
   const [letterExist, setLetterExist] = useState<number>(0);
@@ -65,7 +66,7 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
   const handleOnGuessLetter = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     let letter = guessLetter.current?.value;
-
+    setLetter(letter!);
     if (lettersSet.indexOf(letter!) === -1) {
       setLettersSet((prevState) => [...prevState, letter!]);
     }
@@ -162,7 +163,7 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
           </button>
         </div>
         <div className="guess-word">
-          <WordSetDisplay playedWord={playedWordGame} lettersSet={lettersSet}/>
+          <WordSetDisplay playedWord={playedWordGame} letter={letter!}/>
         </div>
         <section className="guess-letter-form guess-letter-layout">
           <form onSubmit={handleOnGuessLetter} className="form-layout">

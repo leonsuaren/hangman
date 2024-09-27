@@ -4,37 +4,35 @@ import useCreateEmptyArray from "../../utils/useCreateEmptyArray.ts";
 
 type WordSetDisplayProps = {
   playedWord: string[];
-  lettersSet: string[];
+  letter: string;
 };
 
 const WordSetDisplay: FC<WordSetDisplayProps> = ({
   playedWord,
-  lettersSet,
+  letter,
 }) => {
   //create an empty array
-  const newWordSetArray = useCreateEmptyArray(playedWord.length);
+  let newWordSetArray = useCreateEmptyArray(playedWord.length);
   //create an empty array
 
-  let givenLetter: string = lettersSet[0]; //Find a solution
+  let givenLetter: string | undefined = letter; //Find a solution
   const [newWordSet, setNewWordSet] = useState<string[]>(newWordSetArray);
 
   useEffect(() => {
     let letterIndex: number;
+    const newArray: string[] = newWordSetArray;
     if (playedWord.indexOf(givenLetter) !== -1) {
       letterIndex = playedWord.indexOf(givenLetter);
-      setNewWordSet([
-        ...newWordSetArray.slice(0, letterIndex),
-        givenLetter,
-        ...newWordSetArray.slice(letterIndex),
-      ]);
+      newArray.splice(letterIndex, 1, givenLetter);
     }
-  }, [lettersSet]);
+    setNewWordSet(newArray);
+  }, [playedWord]);
 
   console.log({
     playedWord: playedWord,
-    lettersSet: lettersSet,
+    lettersSet: letter,
     letter: givenLetter,
-    emptyArray: newWordSetArray,
+    newWordSetArray: newWordSetArray,
     newWordSet: newWordSet,
   });
   return (
@@ -48,7 +46,9 @@ const WordSetDisplay: FC<WordSetDisplayProps> = ({
       </div>
       <div className="word-base-letter">
         {newWordSetArray.map((word, key) => (
-          <div key={key} className="word-base">{word}</div>
+          <div key={key} className="word-base">
+            {word}
+          </div>
         ))}
       </div>
     </div>
@@ -56,3 +56,9 @@ const WordSetDisplay: FC<WordSetDisplayProps> = ({
 };
 
 export default WordSetDisplay;
+
+// setNewWordSet([
+//   ...newWordSetArray.slice(0, letterIndex),
+//   givenLetter,
+//   ...newWordSetArray.slice(letterIndex),
+// ]);
