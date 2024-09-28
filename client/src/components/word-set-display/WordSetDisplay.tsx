@@ -14,25 +14,28 @@ const WordSetDisplay: FC<WordSetDisplayProps> = ({
   //create an empty array
   let newWordSetArray = useCreateEmptyArray(playedWord.length);
   //create an empty array
-
+  
   let givenLetter: string | undefined = letter; //Find a solution
   const [newWordSet, setNewWordSet] = useState<string[]>(newWordSetArray);
-
+  
   useEffect(() => {
-    let letterIndex: number;
-    const newArray: string[] = newWordSetArray;
-    if (playedWord.indexOf(givenLetter) !== -1) {
-      letterIndex = playedWord.indexOf(givenLetter);
-      newArray.splice(letterIndex, 1, givenLetter);
-    }
-    setNewWordSet(newArray);
-  }, [playedWord]);
+    const wordSetHolder: string[] = newWordSetArray;
+    // let letterIndex: number;
+    // if (playedWord.indexOf(givenLetter) !== -1) {
+    //   letterIndex = playedWord.indexOf(givenLetter);
+    //   wordSetHolder.splice(letterIndex, 1, givenLetter);
+    // }
+    playedWord.forEach((el, index) => {
+      if (el === letter) {
+        wordSetHolder[index] = letter
+      }
+    })
+    setNewWordSet(wordSetHolder);
+  }, [givenLetter]);
 
   console.log({
     playedWord: playedWord,
-    lettersSet: letter,
     letter: givenLetter,
-    newWordSetArray: newWordSetArray,
     newWordSet: newWordSet,
   });
   return (
@@ -56,9 +59,3 @@ const WordSetDisplay: FC<WordSetDisplayProps> = ({
 };
 
 export default WordSetDisplay;
-
-// setNewWordSet([
-//   ...newWordSetArray.slice(0, letterIndex),
-//   givenLetter,
-//   ...newWordSetArray.slice(letterIndex),
-// ]);
