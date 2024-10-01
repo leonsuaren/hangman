@@ -1,0 +1,231 @@
+/*Board Main Layout */
+.board-layout {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  @media (max-width: 667px) {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+  }
+}
+
+.restar-game {
+  grid-area: 1 / 1 / 3 / 3;
+  @media (max-width: 667px) {
+    grid-area: 1 / 1 / 2 / 2;
+    height: 100px;
+  }
+}
+
+.reset-game {
+  grid-area: 1 / 9 / 3 / 11;
+  @media (max-width: 667px) {
+    grid-area: 1 / 6 / 2 / 7;
+    height: 100px;
+  }
+}
+
+.guess-word {
+  grid-area: 1 / 3 / 3 / 9;
+  @media (max-width: 667px) {
+    grid-area: 1 / 2 / 2 / 6;
+    height: 100px;
+  }
+}
+
+/*Guess Letter Section Layuot */
+
+.guess-letter-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.guess-letter-form {
+  grid-area: 3 / 1 / 6 / 6;
+  @media (max-width: 667px) {
+    grid-area: 2 / 1 / 4 / 4;
+    height: 200px;
+  }
+}
+
+.form-layout {
+  grid-area: 1 / 1 / 3 / 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.letter-input {
+  width: 50px;
+  height: 50px;
+  font-size: 2rem;
+  text-align-last: center;
+  text-transform: uppercase;
+}
+
+.errors-and-correct {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  grid-area: 3 / 1 / 4 / 5;
+}
+
+.letter-not-in-word {
+  font-size: 2rem;
+  color: red;
+  margin: 10px;
+  @media (max-width: 667px) {
+    font-size: 1.5rem;
+    margin: 5px;
+  }
+}
+
+.letter-in-word {
+  font-size: 2rem;
+  color: green;
+  margin: 10px;
+  @media (max-width: 667px) {
+    font-size: 1.5rem;
+    margin: 5px;
+  }
+}
+
+.guessed-letter-messages {
+  grid-area: 4 / 1 / 5 / 5;
+}
+
+/*Guess Letter Section Layuot */
+
+.guess-letter-input {
+  width: 100%;
+  height: 50px;
+  font-size: 2rem;
+  text-align-last: center;
+  text-transform: uppercase;
+  @media (max-width: 667px) {
+    width: 90%;
+  }
+}
+
+.guess-word-form {
+  grid-area: 3 / 6 / 6 / 11;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  @media (max-width: 667px) {
+    grid-area: 2 / 4 / 4 / 7;
+    height: 200px;
+  }
+}
+
+.messages {
+  grid-area: 6 / 1 / 7 / 11;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @media (max-width: 667px) {
+    grid-area: 4 / 1 / 5 / 7;
+    height: 100px;
+  }
+}
+
+.warning-message {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  border: solid 2px rgb(236, 177, 67);
+  color: rgb(236, 177, 67);
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  @media (max-width: 667px) {
+    font-size: 0.8rem;
+    width: 90%;
+    height: 50%;
+  }
+}
+
+.information-message {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  border: solid 2px rgb(48, 48, 237);
+  color: rgb(48, 48, 237);
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  @media (max-width: 667px) {
+    font-size: 0.8rem;
+    width: 90%;
+    height: 50%;
+  }
+}
+
+.success-message {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  border: solid 2px rgb(103, 235, 103);
+  color: rgb(103, 235, 103);
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  @media (max-width: 667px) {
+    font-size: 0.8rem;
+    width: 90%;
+    height: 50%;
+  }
+}
+
+.game-over-message {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  border: solid 2px rgb(236, 70, 70);
+  color: rgb(236, 70, 70);
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  @media (max-width: 667px) {
+    font-size: 0.8rem;
+    width: 90%;
+    height: 50%;
+  }
+}
+
+.default {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  @media (max-width: 667px) {
+    font-size: 0.8rem;
+    width: 90%;
+    height: 50%;
+  }
+}
+
+.statistics {
+  grid-area: 7 / 1 / 8 / 11;
+  @media (max-width: 667px) {
+    grid-area: 5 / 1 / 6 / 7;
+    height: 100px;
+  }
+}
+
+/*Board Main Layout */

@@ -1,5 +1,7 @@
 import { type FC, type FormEvent, useRef, useState, useEffect } from "react";
 
+import "./board.css";
+
 import { Link } from "react-router-dom";
 import WordSetDisplay from "../../components/word-set-display/WordSetDisplay";
 
@@ -10,7 +12,7 @@ type BoardProps = {
 
 const Board: FC<BoardProps> = ({ level, playedWord }) => {
   const playedWordGame = [...playedWord];
-  const [letter, setLetter] = useState<string | undefined>('');
+  const [letter, setLetter] = useState<string | undefined>("");
   //handle the letter
   const [letterErrors, setLetterErrors] = useState<number>(0);
   const [letterExist, setLetterExist] = useState<number>(0);
@@ -67,6 +69,15 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
     event.preventDefault();
     let letter = guessLetter.current?.value;
     setLetter(letter!);
+    // if (letter === "") {
+    //   setMessage({
+    //     type: "warning",
+    //     message: "Please enter a letter!"
+    //   });
+    //   setTimeout(() => {
+    //     setMessage({ type: "", message: "" });
+    //   }, 3000);
+    // }
     if (lettersSet.indexOf(letter!) === -1) {
       setLettersSet((prevState) => [...prevState, letter!]);
     }
@@ -103,9 +114,9 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
         message: `The letter '${letter}' does not exist in the guessed word!`,
       });
       setEvaluateLetterResponse((prevState) => [...prevState, "X"]);
-      setTimeout(() => {
-        setMessage({ type: "", message: "" });
-      }, 3000);
+      // setTimeout(() => {
+      //   setMessage({ type: "", message: "" });
+      // }, 3000);
     }
 
     event.currentTarget.reset();
@@ -114,6 +125,15 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
   const handleOnGuessWord = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     let word = guessWord.current?.value;
+    if (!word) {
+      setMessage({
+        type: "warning",
+        message: "Please enter a word!"
+      })
+      setTimeout(() => {
+        setMessage({ type: "", message: "" });
+      }, 3000);
+    }
     if (word === playedWord) {
       setMessage({
         type: "success",
@@ -163,7 +183,7 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
           </button>
         </div>
         <div className="guess-word">
-          <WordSetDisplay playedWord={playedWordGame} letter={letter!}/>
+          <WordSetDisplay playedWord={playedWordGame} letter={letter!} />
         </div>
         <section className="guess-letter-form guess-letter-layout">
           <form onSubmit={handleOnGuessLetter} className="form-layout">
@@ -196,7 +216,7 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
                   : false
               }
             >
-              Send
+              <span>Send</span>
             </button>
           </form>
           <div className="errors-and-correct">
@@ -218,33 +238,35 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
           </div>
           <div></div>
         </section>
-        <form className="guess-word-form" onSubmit={handleOnGuessWord}>
-          <label htmlFor="letter">Guess the Word!</label>
-          <input
-            className="guess-letter-input"
-            type="text"
-            name="word"
-            ref={guessWord}
-            disabled={
-              maxWordAttempts === wordErrors
-                ? true
-                : lettersSet.length === 0
-                ? true
-                : false
-            }
-          />
-          <button
-            disabled={
-              maxWordAttempts === wordErrors
-                ? true
-                : lettersSet.length === 0
-                ? true
-                : false
-            }
-          >
-            Good Lock!
-          </button>
-        </form>
+        <section className="guess-word-form">
+          <form onSubmit={handleOnGuessWord}>
+            <label htmlFor="letter">Guess the Word</label>
+            <input
+              className="guess-letter-input"
+              type="text"
+              name="word"
+              ref={guessWord}
+              disabled={
+                maxWordAttempts === wordErrors
+                  ? true
+                  : lettersSet.length === 0
+                  ? true
+                  : false
+              }
+            />
+            <button
+              disabled={
+                maxWordAttempts === wordErrors
+                  ? true
+                  : lettersSet.length === 0
+                  ? true
+                  : false
+              }
+            >
+              <span>Good Lock!</span>
+            </button>
+          </form>
+        </section>
         <div className="messages">
           <div
             className={
