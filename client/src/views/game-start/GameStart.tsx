@@ -1,24 +1,22 @@
+import { type FC, useContext } from 'react';
 import { Link } from "react-router-dom";
 
-import { type FC } from "react";
+import { GameContext } from '../../context/game-context/GameContext';
 
-type GameStartProps = {
-  onSelectLevel: (level: 'Easy' | 'Medium' | 'Difficult') => void;
-};
-
-const GameStart: FC<GameStartProps> = ({ onSelectLevel }) => {
+const GameStart: FC = () => {
+  const gameContext = useContext(GameContext);
   return (
     <>
       <h1>Let's Play Hangman!</h1>
       <h3>Level</h3>
       <Link to={"/board"}>
-        <button onClick={() => onSelectLevel("Easy")}><span>Easy</span></button>
+        <button onClick={() => gameContext.handleOnSelectLevel("Easy")}><span>Easy</span></button>
       </Link>
       <Link to={"/board"}>
-        <button onClick={() => onSelectLevel("Medium")}><span>Medium</span></button>
+        <button onClick={() => gameContext.handleOnSelectLevel("Medium")}><span>Medium</span></button>
       </Link>
       <Link to={"/board"}>
-        <button onClick={() => onSelectLevel("Difficult")}><span>Difficult</span></button>
+        <button onClick={() => gameContext.handleOnSelectLevel("Difficult")}><span>Difficult</span></button>
       </Link>
     </>
   );

@@ -1,16 +1,17 @@
-import { type FC, type FormEvent, useRef, useState, useEffect } from "react";
+import { type FC, type FormEvent, useRef, useState, useEffect, useContext } from "react";
+
+import { Link } from "react-router-dom";
+
+
+import { GameContext } from "../../context/game-context/GameContext";
+import WordSetDisplay from "../../components/word-set-display/WordSetDisplay";
 
 import "./board.css";
 
-import { Link } from "react-router-dom";
-import WordSetDisplay from "../../components/word-set-display/WordSetDisplay";
-
-type BoardProps = {
-  level: string;
-  playedWord: string;
-};
-
-const Board: FC<BoardProps> = ({ level, playedWord }) => {
+const Board: FC = () => {
+  const gameContext = useContext(GameContext);
+  const playedWord = gameContext.playedWord;
+  const level = gameContext.level;
   const playedWordGame = [...playedWord];
   const [letter, setLetter] = useState<string | undefined>("");
   //handle the letter
@@ -114,9 +115,9 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
         message: `The letter '${letter}' does not exist in the guessed word!`,
       });
       setEvaluateLetterResponse((prevState) => [...prevState, "X"]);
-      // setTimeout(() => {
-      //   setMessage({ type: "", message: "" });
-      // }, 3000);
+      setTimeout(() => {
+        setMessage({ type: "", message: "" });
+      }, 3000);
     }
 
     event.currentTarget.reset();
@@ -183,7 +184,7 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
           </button>
         </div>
         <div className="guess-word">
-          <WordSetDisplay playedWord={playedWordGame} letter={letter!} />
+          <WordSetDisplay letter={letter!} />
         </div>
         <section className="guess-letter-form guess-letter-layout">
           <form onSubmit={handleOnGuessLetter} className="form-layout">

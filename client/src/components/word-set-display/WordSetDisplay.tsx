@@ -1,18 +1,21 @@
-import { useEffect, useState, type FC } from "react";
+import { useEffect, useState,useContext, type FC } from "react";
 
+import { GameContext } from "../../context/game-context/GameContext.tsx";
 import useCreateEmptyArray from "../../utils/useCreateEmptyArray.ts";
 
 type WordSetDisplayProps = {
-  playedWord: string[];
   letter: string;
 };
 
 const WordSetDisplay: FC<WordSetDisplayProps> = ({
-  playedWord,
   letter,
 }) => {
+  const gameContext = useContext(GameContext);
   //create an empty array
-  let newWordSetArray = useCreateEmptyArray(playedWord.length);
+  const playedWord = gameContext.playedWord;
+  const playedWordLength = playedWord.length;
+  const wordSet = [...playedWord]
+  let newWordSetArray = useCreateEmptyArray(playedWordLength);
   //create an empty array
   
   let givenLetter: string | undefined = letter; //Find a solution
@@ -20,12 +23,7 @@ const WordSetDisplay: FC<WordSetDisplayProps> = ({
   
   useEffect(() => {
     const wordSetHolder: string[] = newWordSetArray;
-    // let letterIndex: number;
-    // if (playedWord.indexOf(givenLetter) !== -1) {
-    //   letterIndex = playedWord.indexOf(givenLetter);
-    //   wordSetHolder.splice(letterIndex, 1, givenLetter);
-    // }
-    playedWord.forEach((el, index) => {
+    wordSet.forEach((el, index) => {
       if (el === letter) {
         wordSetHolder[index] = letter
       }
