@@ -148,18 +148,18 @@ const Board: FC<BoardProps> = ({ level, playedWord }) => {
   return (
     <>
       <h1>Hangman</h1>
-      <h2>Level {level}</h2>
+      <h3>Level {level}</h3>
       <section className="board-layout">
         <div className="restar-game">
           <Link to="/">
             <button>
-              <span>Restar Game</span>
+              <span>Restar</span>
             </button>
           </Link>
         </div>
         <div className="reset-game">
           <button>
-            <span>Reset Game</span>
+            <span>Reset</span>
           </button>
         </div>
         <div className="guess-word">
