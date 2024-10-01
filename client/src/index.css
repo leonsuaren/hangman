@@ -2,6 +2,7 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  padding: 0;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
@@ -31,12 +32,18 @@ body {
 }
 
 h1 {
-  font-size: 3.2em;
+  font-size: 2.2em;
   line-height: 1.1;
+  @media (max-width: 668px) {
+    font-size: 2rem;
+  }
 }
 
 span {
   font-size: 1rem;
+  @media (max-width: 668px) {
+    font-size: .8rem;;
+  }
 }
 
 button {
@@ -46,11 +53,14 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
   margin: 5px;
-  /* width: 100px; */
+  background-color: #535bf2;
+  @media (max-width: 668px) {
+    width: 100px;
+    padding: 10px;
+  }
 }
 button:hover {
   border-color: #646cff;
@@ -72,162 +82,6 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
-/*Board Main Layout */
-.board-layout {
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  grid-template-rows: repeat(8, 1fr);
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
-}
-
-.restar-game {
-  grid-area: 1 / 1 / 3 / 3;
-}
-
-.reset-game {
-  grid-area: 1 / 9 / 3 / 11;
-}
-
-.guess-word {
-  grid-area: 1 / 3 / 3 / 9;
-}
-
-.guess-letter-form {
-  grid-area: 3 / 2 / 7 / 6;
-}
-
-.guess-word-form {
-  grid-area: 3 / 6 / 7 / 10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.guess-letter-input {
-  width: 100%;
-  height: 50px;
-  font-size: 2rem;
-  text-align-last: center;
-  text-transform: uppercase;
-}
-
-.messages {
-  grid-area: 7 / 2 / 8 / 10;
-  width: 100%;
-  height: 100%;
-}
-
-.warning-message {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  border: solid 2px rgb(236, 177, 67);
-  color: rgb(236, 177, 67);
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-}
-
-.information-message {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  border: solid 2px rgb(48, 48, 237);
-  color: rgb(48, 48, 237);
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-}
-
-.success-message {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  border: solid 2px rgb(103, 235, 103);
-  color: rgb(103, 235, 103);
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-}
-
-.game-over-message {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  border: solid 2px rgb(236, 70, 70);
-  color: rgb(236, 70, 70);
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-}
-
-.default {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-}
-
-.statistics {
-  grid-area: 8 / 2 / 9 / 10;
-}
-
-/*Board Main Layout */
-/*Guess Letter Section Layuot */
-.guess-letter-layout {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(4, 1fr);
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
-}
-
-.form-layout {
-  grid-area: 1 / 1 / 3 / 5;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.letter-input {
-  width: 50px;
-  height: 50px;
-  font-size: 2rem;
-  text-align-last: center;
-  text-transform: uppercase;
-}
-
-.errors-and-correct {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  width: 100%;
-  grid-area: 3 / 1 / 4 / 5;
-}
-
-.letter-not-in-word {
-  font-size: 2rem;
-  color: red;
-  margin: 10px;
-}
-
-.letter-in-word {
-  font-size: 2rem;
-  color: green;
-  margin: 10px;
-}
-
-.guessed-letter-messages {
-  grid-area: 4 / 1 / 5 / 5;
-}
-
-/*Guess Letter Section Layuot */
 
 /*Word Set Display */
 .word-set-wrapper {
