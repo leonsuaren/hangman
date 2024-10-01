@@ -46,6 +46,12 @@ const GameContextProvider = ({ children }: GameContextProviderProps) => {
     setLevel(level);
   }
 
+  console.log("Context", {
+    level: level,
+    playedWord: playedWord,
+    playedWordSet: playedWordSet
+  })
+
   return (
     <GameContext.Provider value={{playedWordSet, playedWord, level, handleOnSelectLevel, setPlayedWord, setLevel}}>
       {children}

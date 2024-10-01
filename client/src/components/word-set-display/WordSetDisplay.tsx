@@ -31,7 +31,7 @@ const WordSetDisplay: FC<WordSetDisplayProps> = ({
     setNewWordSet(wordSetHolder);
   }, [givenLetter]);
 
-  console.log({
+  console.log("Word Display" ,{
     playedWord: playedWord,
     letter: givenLetter,
     newWordSet: newWordSet,

@@ -1,10 +1,21 @@
-import { type FC, type FormEvent, useRef, useState, useEffect, useContext } from "react";
+import {
+  type FC,
+  type FormEvent,
+  useRef,
+  useState,
+  useEffect,
+  useContext,
+} from "react";
 
 import { Link } from "react-router-dom";
 
 import { GameContext } from "../../context/game-context/GameContext";
 import WordSetDisplay from "../../components/word-set-display/WordSetDisplay";
-import { WordsLevelEasy, WordsLevelMedium, WordsLevelDifficult } from '../../utils/words';
+import {
+  WordsLevelEasy,
+  WordsLevelMedium,
+  WordsLevelDifficult,
+} from "../../utils/words";
 
 import "./board.css";
 
@@ -67,7 +78,7 @@ const Board: FC = () => {
         setMessage({ type: "", message: "" });
       }, 3000);
     }
-  }, [letterErrors, letterExist]);
+  }, [letterErrors, letterExist, lettersSet]);
 
   const handleOnGuessLetter = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -132,11 +143,13 @@ const Board: FC = () => {
     if (!word) {
       setMessage({
         type: "warning",
-        message: "Please enter a word!"
-      })
+        message: "Please enter a word!",
+      });
       setTimeout(() => {
         setMessage({ type: "", message: "" });
       }, 3000);
+    } else if (word) {
+      setMaxWordAttempts((prevState) => prevState + 1);
     }
     if (word === playedWord) {
       setMessage({
@@ -157,28 +170,32 @@ const Board: FC = () => {
     }
     event.currentTarget.reset();
   };
-  // console.log({
-  //   level: level,
-  //   playedWord: playedWord,
-  //   letterErrors: letterErrors,
-  //   letterExist: letterExist,
-  //   letterSet: lettersSet,
-  //   message: message,
-  //   evaluateLetterResponse: evaluateLetterResponse,
-  //   maxWordAttempts: maxWordAttempts,
-  //   wordErrors: wordErrors,
-  // });
+  console.log("Board", {
+    level: level,
+    playedWord: playedWord,
+    letterErrors: letterErrors,
+    letterExist: letterExist,
+    letterSet: lettersSet,
+    message: message,
+    evaluateLetterResponse: evaluateLetterResponse,
+    maxWordAttempts: maxWordAttempts,
+    wordErrors: wordErrors,
+  });
 
   const handleOnResetLevel = () => {
     if (level === "Easy") {
       gameContext.setPlayedWord(WordsLevelEasy[randomWord]);
     } else if (level === "Medium") {
-      gameContext.setPlayedWord(WordsLevelMedium[randomWord])
+      gameContext.setPlayedWord(WordsLevelMedium[randomWord]);
     } else if (level === "Difficult") {
       gameContext.setPlayedWord(WordsLevelDifficult[randomWord]);
     }
-    gameContext.setLevel(level)
-  }
+    gameContext.setLevel(level);
+    setLetterErrors(0);
+    setLetterExist(0);
+    setLettersSet([]);
+    setEvaluateLetterResponse([]);
+  };
 
   return (
     <>
@@ -193,7 +210,24 @@ const Board: FC = () => {
           </Link>
         </div>
         <div className="reset-game">
-          <button onClick={ handleOnResetLevel}>
+          <button
+            onClick={handleOnResetLevel}
+            disabled={
+              letterExist >= 2 && level === "Easy"
+                ? true
+                : letterErrors >= 2 && level === "Easy"
+                ? true
+                : letterExist >= 3 && level === "Medium"
+                ? true
+                : letterErrors >= 3 && level === "Medium"
+                ? true
+                : letterExist >= 3 && level === "Difficult"
+                ? true
+                : letterErrors >= 3 && level === "Difficult"
+                ? true
+                : false
+            }
+          >
             <span>Reset</span>
           </button>
         </div>
@@ -262,18 +296,34 @@ const Board: FC = () => {
               name="word"
               ref={guessWord}
               disabled={
-                maxWordAttempts === wordErrors
+                letterExist === 0 && letterErrors === 0
                   ? true
-                  : lettersSet.length === 0
+                  : letterExist === 0 && letterErrors === 1
+                  ? false
+                  : letterExist === 1 && letterErrors === 0
+                  ? false
+                  : maxWordAttempts >= 2 && level === "Easy"
+                  ? true
+                  : maxWordAttempts >= 3 && level === "Medium"
+                  ? true
+                  : maxWordAttempts === 3 && level === "Difficult"
                   ? true
                   : false
               }
             />
             <button
               disabled={
-                maxWordAttempts === wordErrors
+                letterExist === 0 && letterErrors === 0
                   ? true
-                  : lettersSet.length === 0
+                  : letterExist === 0 && letterErrors === 1
+                  ? false
+                  : letterExist === 1 && letterErrors === 0
+                  ? false
+                  : maxWordAttempts >= 2 && level === "Easy"
+                  ? true
+                  : maxWordAttempts >= 3 && level === "Medium"
+                  ? true
+                  : maxWordAttempts === 3 && level === "Difficult"
                   ? true
                   : false
               }
