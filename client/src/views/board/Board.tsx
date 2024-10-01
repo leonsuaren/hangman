@@ -2,9 +2,9 @@ import { type FC, type FormEvent, useRef, useState, useEffect, useContext } from
 
 import { Link } from "react-router-dom";
 
-
 import { GameContext } from "../../context/game-context/GameContext";
 import WordSetDisplay from "../../components/word-set-display/WordSetDisplay";
+import { WordsLevelEasy, WordsLevelMedium, WordsLevelDifficult } from '../../utils/words';
 
 import "./board.css";
 
@@ -29,6 +29,9 @@ const Board: FC = () => {
   const [maxWordAttempts, setMaxWordAttempts] = useState<number>(1);
   const [wordErrors, setwordErrors] = useState<number>(0);
   //handle the word
+  //reset word
+  let randomWord: number = Math.floor(Math.random() * 29);
+  //reset word
   const [message, setMessage] = useState<{ type: string; message: string }>({
     type: " " || "information" || "warning" || "success" || "fail",
     message: "",
@@ -166,6 +169,17 @@ const Board: FC = () => {
   //   wordErrors: wordErrors,
   // });
 
+  const handleOnResetLevel = () => {
+    if (level === "Easy") {
+      gameContext.setPlayedWord(WordsLevelEasy[randomWord]);
+    } else if (level === "Medium") {
+      gameContext.setPlayedWord(WordsLevelMedium[randomWord])
+    } else if (level === "Difficult") {
+      gameContext.setPlayedWord(WordsLevelDifficult[randomWord]);
+    }
+    gameContext.setLevel(level)
+  }
+
   return (
     <>
       <h1>Hangman</h1>
@@ -173,13 +187,13 @@ const Board: FC = () => {
       <section className="board-layout">
         <div className="restar-game">
           <Link to="/">
-            <button>
+            <button onClick={() => gameContext.handleOnSelectLevel("")}>
               <span>Restar</span>
             </button>
           </Link>
         </div>
         <div className="reset-game">
-          <button>
+          <button onClick={ handleOnResetLevel}>
             <span>Reset</span>
           </button>
         </div>

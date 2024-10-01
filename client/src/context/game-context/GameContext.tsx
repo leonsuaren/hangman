@@ -1,4 +1,4 @@
-import { type ReactNode, createContext, useState, useEffect } from 'react';
+import { type ReactNode, createContext, useState, useEffect, Dispatch, SetStateAction } from 'react';
 
 import { WordsLevelEasy, WordsLevelMedium, WordsLevelDifficult } from '../../utils/words.ts';
 
@@ -8,13 +8,17 @@ type GameContextProps = {
   playedWordSet: string[];
   playedWord: string;
   level: string;
+  setPlayedWord: Dispatch<SetStateAction<any>>;
+  setLevel: Dispatch<SetStateAction<any>>
 }
 
 export const GameContext = createContext<GameContextProps>({
   handleOnSelectLevel: () => {},
   playedWordSet: [],
   playedWord: '',
-  level: ''
+  level: '',
+  setPlayedWord: () => {},
+  setLevel: () => {}
 });
 
 type GameContextProviderProps = {
@@ -43,7 +47,7 @@ const GameContextProvider = ({ children }: GameContextProviderProps) => {
   }
 
   return (
-    <GameContext.Provider value={{playedWordSet, playedWord, level, handleOnSelectLevel}}>
+    <GameContext.Provider value={{playedWordSet, playedWord, level, handleOnSelectLevel, setPlayedWord, setLevel}}>
       {children}
     </GameContext.Provider>
   )
