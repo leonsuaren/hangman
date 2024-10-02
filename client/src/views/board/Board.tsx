@@ -39,6 +39,7 @@ const Board: FC = () => {
   const guessWord = useRef<HTMLInputElement>(null);
   const [maxWordAttempts, setMaxWordAttempts] = useState<number>(1);
   const [wordErrors, setwordErrors] = useState<number>(0);
+  const [guessedWord, setGuessedWord] = useState<string | undefined>('');
   //handle the word
   //reset word
   let randomWord: number = Math.floor(Math.random() * 29);
@@ -134,6 +135,7 @@ const Board: FC = () => {
   const handleOnGuessWord = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     let word = guessWord.current?.value;
+    setGuessedWord(word);
     if (!word) {
       setMessage({
         type: "warning",
@@ -158,17 +160,17 @@ const Board: FC = () => {
     }
     event.currentTarget.reset();
   };
-  console.log("Board", {
-    level: level,
-    playedWord: playedWord,
-    letterErrors: letterErrors,
-    letterExist: letterExist,
-    letterSet: lettersSet,
-    message: message,
-    evaluateLetterResponse: evaluateLetterResponse,
-    maxWordAttempts: maxWordAttempts,
-    wordErrors: wordErrors,
-  });
+  // console.log("Board", {
+  //   level: level,
+  //   playedWord: playedWord,
+  //   letterErrors: letterErrors,
+  //   letterExist: letterExist,
+  //   letterSet: lettersSet,
+  //   message: message,
+  //   evaluateLetterResponse: evaluateLetterResponse,
+  //   maxWordAttempts: maxWordAttempts,
+  //   wordErrors: wordErrors,
+  // });
 
   const handleOnRestartGame = () => {
     gameContext.handleOnSelectLevel(" ");
@@ -185,7 +187,8 @@ const Board: FC = () => {
     setLetterExist(0);
     setLettersSet([]);
     setEvaluateLetterResponse([]);
-    setMaxWordAttempts(0)
+    setMaxWordAttempts(0);
+    setGuessedWord('');
     gameContext.setResetGame(0);
   }
 
@@ -203,7 +206,8 @@ const Board: FC = () => {
     setLetterExist(0);
     setLettersSet([]);
     setEvaluateLetterResponse([]);
-    setMaxWordAttempts(0)
+    setMaxWordAttempts(0);
+    setGuessedWord('');
     gameContext.setResetGame(prevState => prevState + 1);
   };
 
@@ -244,7 +248,7 @@ const Board: FC = () => {
           </button>
         </div>
         <div className="guess-word">
-          <WordSetDisplay letter={letter!} />
+          <WordSetDisplay letter={letter!} word={guessedWord!}/>
         </div>
         <section className="guess-letter-form guess-letter-layout">
           <form onSubmit={handleOnGuessLetter} className="form-layout">
