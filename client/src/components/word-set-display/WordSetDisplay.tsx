@@ -31,11 +31,11 @@ const WordSetDisplay: FC<WordSetDisplayProps> = ({
     setNewWordSet(wordSetHolder);
   }, [givenLetter]);
 
-  console.log("Word Display" ,{
-    playedWord: playedWord,
-    letter: givenLetter,
-    newWordSet: newWordSet,
-  });
+  // console.log("Word Display" ,{
+  //   playedWord: playedWord,
+  //   letter: givenLetter,
+  //   newWordSet: newWordSet,
+  // });
   return (
     <div className="word-set-wrapper">
       <div className="word-set-letter">

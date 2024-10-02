@@ -49,6 +49,14 @@ const Board: FC = () => {
   });
 
   useEffect(() => {
+    // let cleanMessage;
+    // cleanMessage = setTimeout(() => {
+    //   setMessage({
+    //     type: '/.*(?:)/',
+    //     message: '/.*(?:)/'
+    //   });
+    // }, 3000);
+
     if (level === "Medium") {
       setMaxLetterExist(3);
       setMaxWordAttempts(2);
@@ -78,21 +86,22 @@ const Board: FC = () => {
         setMessage({ type: "", message: "" });
       }, 3000);
     }
+    // return () => clearTimeout(cleanMessage)
   }, [letterErrors, letterExist, lettersSet]);
 
   const handleOnGuessLetter = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     let letter = guessLetter.current?.value;
-    setLetter(letter!);
-    // if (letter === "") {
-    //   setMessage({
-    //     type: "warning",
-    //     message: "Please enter a letter!"
-    //   });
-    //   setTimeout(() => {
-    //     setMessage({ type: "", message: "" });
-    //   }, 3000);
-    // }
+    setLetter(letter);
+    if (!letter) {
+      setMessage({
+        type: "warning",
+        message: "Please enter a letter!"
+      });
+      setTimeout(() => {
+        setMessage({ type: "", message: "" });
+      }, 3000);
+    }
     if (lettersSet.indexOf(letter!) === -1) {
       setLettersSet((prevState) => [...prevState, letter!]);
     }
@@ -157,7 +166,8 @@ const Board: FC = () => {
         message: "Congratulations you guessed the word",
       });
       setTimeout(() => {
-        setMessage({ type: "", message: "" });
+        // gameContext.setResetGame(0)
+        // handleOnResetLevel();
       }, 3000);
     } else {
       setwordErrors((prevState) => prevState + 1);
@@ -167,6 +177,9 @@ const Board: FC = () => {
       setTimeout(() => {
         setMessage({ type: "", message: "" });
       }, 3000);
+    }
+    if (maxWordAttempts >= 2 && level === "Easy") {
+      setMessage
     }
     event.currentTarget.reset();
   };
@@ -182,6 +195,25 @@ const Board: FC = () => {
     wordErrors: wordErrors,
   });
 
+  const handleOnRestartGame = () => {
+    gameContext.handleOnSelectLevel(" ");
+    if (level === "Easy") {
+      gameContext.setPlayedWord(WordsLevelEasy[randomWord]);
+    } else if (level === "Medium") {
+      gameContext.setPlayedWord(WordsLevelMedium[randomWord]);
+    } else if (level === "Difficult") {
+      gameContext.setPlayedWord(WordsLevelDifficult[randomWord]);
+    }
+    gameContext.setLevel(level);
+    setMessage({ type: "", message: "" });
+    setLetterErrors(0);
+    setLetterExist(0);
+    setLettersSet([]);
+    setEvaluateLetterResponse([]);
+    setMaxWordAttempts(0)
+    gameContext.setResetGame(0);
+  }
+
   const handleOnResetLevel = () => {
     if (level === "Easy") {
       gameContext.setPlayedWord(WordsLevelEasy[randomWord]);
@@ -191,10 +223,13 @@ const Board: FC = () => {
       gameContext.setPlayedWord(WordsLevelDifficult[randomWord]);
     }
     gameContext.setLevel(level);
+    setMessage({ type: "", message: "" });
     setLetterErrors(0);
     setLetterExist(0);
     setLettersSet([]);
     setEvaluateLetterResponse([]);
+    setMaxWordAttempts(0)
+    gameContext.setResetGame(prevState => prevState + 1);
   };
 
   return (
@@ -204,7 +239,7 @@ const Board: FC = () => {
       <section className="board-layout">
         <div className="restar-game">
           <Link to="/">
-            <button onClick={() => gameContext.handleOnSelectLevel("")}>
+            <button onClick={handleOnRestartGame}>
               <span>Restar</span>
             </button>
           </Link>
@@ -224,6 +259,8 @@ const Board: FC = () => {
                 : letterExist >= 3 && level === "Difficult"
                 ? true
                 : letterErrors >= 3 && level === "Difficult"
+                ? true
+                : gameContext.resetGame >= 2
                 ? true
                 : false
             }

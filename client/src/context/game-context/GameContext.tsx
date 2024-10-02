@@ -8,8 +8,10 @@ type GameContextProps = {
   playedWordSet: string[];
   playedWord: string;
   level: string;
+  resetGame: number;
   setPlayedWord: Dispatch<SetStateAction<any>>;
-  setLevel: Dispatch<SetStateAction<any>>
+  setLevel: Dispatch<SetStateAction<any>>;
+  setResetGame: Dispatch<SetStateAction<number>>;
 }
 
 export const GameContext = createContext<GameContextProps>({
@@ -17,8 +19,10 @@ export const GameContext = createContext<GameContextProps>({
   playedWordSet: [],
   playedWord: '',
   level: '',
+  resetGame: 0,
   setPlayedWord: () => {},
-  setLevel: () => {}
+  setLevel: () => {},
+  setResetGame: () => {}
 });
 
 type GameContextProviderProps = {
@@ -28,6 +32,7 @@ type GameContextProviderProps = {
 const GameContextProvider = ({ children }: GameContextProviderProps) => {
   const [ level, setLevel ] = useState<string>('');
   const [ playedWord, setPlayedWord ] = useState<string>('');
+  const [resetGame, setResetGame] = useState<number>(0);
   const playedWordSet = [...playedWord]
   let randomWord: number = Math.floor(Math.random() * 29);
 
@@ -41,19 +46,17 @@ const GameContextProvider = ({ children }: GameContextProviderProps) => {
     }
   }, [level]);
 
+  const handleOnSelectLevel = (level: string) => setLevel(level);
 
-  const handleOnSelectLevel = (level: string) => {
-    setLevel(level);
-  }
-
-  console.log("Context", {
-    level: level,
-    playedWord: playedWord,
-    playedWordSet: playedWordSet
-  })
+  // console.log("Context", {
+  //   level: level,
+  //   playedWord: playedWord,
+  //   playedWordSet: playedWordSet,
+  //   resetGame: resetGame
+  // })
 
   return (
-    <GameContext.Provider value={{playedWordSet, playedWord, level, handleOnSelectLevel, setPlayedWord, setLevel}}>
+    <GameContext.Provider value={{playedWordSet, playedWord, level, resetGame, handleOnSelectLevel, setPlayedWord, setLevel, setResetGame}}>
       {children}
     </GameContext.Provider>
   )
