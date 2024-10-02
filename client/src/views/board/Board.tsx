@@ -49,13 +49,15 @@ const Board: FC = () => {
   });
 
   useEffect(() => {
-    // let cleanMessage;
-    // cleanMessage = setTimeout(() => {
-    //   setMessage({
-    //     type: '/.*(?:)/',
-    //     message: '/.*(?:)/'
-    //   });
-    // }, 3000);
+    let cleanMessage: any;
+    if (message.type === "information" || "warning" || "success" || "fail") {
+      cleanMessage = setTimeout(() => {
+        setMessage({
+          type: ' ',
+          message: ' '
+        });
+      }, 3000);
+    }
 
     if (level === "Medium") {
       setMaxLetterExist(3);
@@ -72,9 +74,6 @@ const Board: FC = () => {
         type: "warning",
         message: "You reached the maximum mistakes!",
       });
-      setTimeout(() => {
-        setMessage({ type: "", message: "" });
-      }, 3000);
     }
 
     if (letterExist === maxLetterExist) {
@@ -82,11 +81,10 @@ const Board: FC = () => {
         type: "information",
         message: `You reached the maximum number of correct answers ${maxLetterExist}!`,
       });
-      setTimeout(() => {
-        setMessage({ type: "", message: "" });
-      }, 3000);
     }
-    // return () => clearTimeout(cleanMessage)
+    
+    return () => clearTimeout(cleanMessage);
+
   }, [letterErrors, letterExist, lettersSet]);
 
   const handleOnGuessLetter = (event: FormEvent<HTMLFormElement>) => {
@@ -98,9 +96,6 @@ const Board: FC = () => {
         type: "warning",
         message: "Please enter a letter!"
       });
-      setTimeout(() => {
-        setMessage({ type: "", message: "" });
-      }, 3000);
     }
     if (lettersSet.indexOf(letter!) === -1) {
       setLettersSet((prevState) => [...prevState, letter!]);
@@ -110,11 +105,7 @@ const Board: FC = () => {
         type: "information",
         message: "You entered that letter already",
       });
-      setTimeout(() => {
-        setMessage({ type: "", message: "" });
-      }, 3000);
     }
-
     if (
       playedWordGame.indexOf(letter!) !== -1 &&
       lettersSet.indexOf(letter!) === -1
@@ -125,9 +116,6 @@ const Board: FC = () => {
         message: `The letter '${letter}' exist in the guessed word!`,
       });
       setEvaluateLetterResponse((prevState) => [...prevState, "Y"]);
-      setTimeout(() => {
-        setMessage({ type: "", message: "" });
-      }, 3000);
     } else if (
       playedWordGame.indexOf(letter!) === -1 &&
       lettersSet.indexOf(letter!) === -1
@@ -138,9 +126,6 @@ const Board: FC = () => {
         message: `The letter '${letter}' does not exist in the guessed word!`,
       });
       setEvaluateLetterResponse((prevState) => [...prevState, "X"]);
-      setTimeout(() => {
-        setMessage({ type: "", message: "" });
-      }, 3000);
     }
 
     event.currentTarget.reset();
@@ -154,9 +139,6 @@ const Board: FC = () => {
         type: "warning",
         message: "Please enter a word!",
       });
-      setTimeout(() => {
-        setMessage({ type: "", message: "" });
-      }, 3000);
     } else if (word) {
       setMaxWordAttempts((prevState) => prevState + 1);
     }
@@ -165,18 +147,11 @@ const Board: FC = () => {
         type: "success",
         message: "Congratulations you guessed the word",
       });
-      setTimeout(() => {
-        // gameContext.setResetGame(0)
-        // handleOnResetLevel();
-      }, 3000);
     } else {
       setwordErrors((prevState) => prevState + 1);
     }
     if (maxWordAttempts === wordErrors) {
       setMessage({ type: "fail", message: "Game Over" });
-      setTimeout(() => {
-        setMessage({ type: "", message: "" });
-      }, 3000);
     }
     if (maxWordAttempts >= 2 && level === "Easy") {
       setMessage
