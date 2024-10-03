@@ -99,7 +99,7 @@ const Board: FC = () => {
       });
     }
     if (lettersSet.indexOf(letter!) === -1) {
-      setLettersSet((prevState) => [...prevState, letter!]);
+      setLettersSet([...lettersSet, letter!]);
     }
     if (lettersSet.indexOf(letter!) !== -1) {
       setMessage({
