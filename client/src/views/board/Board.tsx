@@ -33,7 +33,6 @@ const Board: FC = () => {
   const [evaluateLetterResponse, setEvaluateLetterResponse] = useState<
     string[]
   >([]);
-  const [guessLetter, setGuessLetter] = useState<string | undefined>('');
   //handle the letter
   //handle the word
   const guessWord = useRef<HTMLInputElement>(null);
@@ -69,7 +68,7 @@ const Board: FC = () => {
       setMaxWordAttempts(3);
     }
     return () => clearTimeout(cleanMessage);
-  }, [letterErrors, letterExist]);
+  }, [message]);
 
   const handleOnGuessWord = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -109,7 +108,6 @@ const Board: FC = () => {
     evaluateLetterResponse: evaluateLetterResponse,
     maxWordAttempts: maxWordAttempts,
     wordErrors: wordErrors,
-    guessLetter: guessLetter
   });
 
   const handleOnRestartGame = () => {
@@ -197,7 +195,6 @@ const Board: FC = () => {
             maxWordAttempts={maxWordAttempts}
             wordErrors={wordErrors}
             maxLetterExist={maxLetterExist}
-            setGuessLetter={setGuessLetter}
             setLetter={setLetter}
             setLetterErrors={setLetterErrors}
             setLetterExist={setLetterExist}
@@ -223,7 +220,6 @@ const Board: FC = () => {
               }
             })}
           </div>
-          <div></div>
         </section>
         <section className="guess-word-form">
           <form onSubmit={handleOnGuessWord}>

@@ -3,10 +3,8 @@ import {
   useRef,
   Dispatch,
   SetStateAction,
-  useEffect,
   FormEvent,
   useContext,
-  useState,
 } from "react";
 
 import { GameContext } from "../../context/game-context/GameContext";
@@ -18,7 +16,6 @@ type LetterFormProps = {
   maxWordAttempts: number;
   wordErrors: number;
   lettersSet: string[];
-  setGuessLetter: Dispatch<SetStateAction<any>>;
   setLetter: Dispatch<SetStateAction<any>>;
   setMessage: Dispatch<
     SetStateAction<{
@@ -39,7 +36,6 @@ export const LetterForm: FC<LetterFormProps> = ({
   maxWordAttempts,
   wordErrors,
   lettersSet,
-  setGuessLetter,
   setLetter,
   setMessage,
   setLetterExist,
@@ -51,14 +47,12 @@ export const LetterForm: FC<LetterFormProps> = ({
   const guessLetter = useRef<HTMLInputElement>(null);
   const playedWord = gameContext.playedWord;
   const playedWordGame = [...playedWord];
-  // let letter = guessLetter.current?.value;
 
   console.log("letter form", { letterErrors: letterErrors, playedWord: playedWord });
 
   const handleOnGuessLetter = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     let letter = guessLetter.current?.value;
-    console.log(letter);
     setLetter(letter);
     if (!letter) {
       setMessage({
