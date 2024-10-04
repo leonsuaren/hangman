@@ -1,0 +1,151 @@
+import {
+  type FC,
+  useRef,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  FormEvent,
+  useContext,
+  useState,
+} from "react";
+
+import { GameContext } from "../../context/game-context/GameContext";
+
+type LetterFormProps = {
+  letterErrors: number;
+  letterExist: number;
+  maxLetterExist: number;
+  maxWordAttempts: number;
+  wordErrors: number;
+  lettersSet: string[];
+  setGuessLetter: Dispatch<SetStateAction<any>>;
+  setLetter: Dispatch<SetStateAction<any>>;
+  setMessage: Dispatch<
+    SetStateAction<{
+      type: string;
+      message: string;
+    }>
+  >;
+  setLetterExist: Dispatch<SetStateAction<number>>;
+  setLetterErrors: Dispatch<SetStateAction<number>>;
+  setEvaluateLetterResponse: Dispatch<SetStateAction<string[]>>;
+  setLettersSet: Dispatch<SetStateAction<string[]>>
+};
+
+export const LetterForm: FC<LetterFormProps> = ({
+  letterErrors,
+  letterExist,
+  maxLetterExist,
+  maxWordAttempts,
+  wordErrors,
+  lettersSet,
+  setGuessLetter,
+  setLetter,
+  setMessage,
+  setLetterExist,
+  setLetterErrors,
+  setEvaluateLetterResponse,
+  setLettersSet
+}) => {
+  const gameContext = useContext(GameContext);
+  const guessLetter = useRef<HTMLInputElement>(null);
+  const playedWord = gameContext.playedWord;
+  const playedWordGame = [...playedWord];
+  // let letter = guessLetter.current?.value;
+
+  console.log("letter form", { letterErrors: letterErrors, playedWord: playedWord });
+
+  const handleOnGuessLetter = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    let letter = guessLetter.current?.value;
+    console.log(letter);
+    setLetter(letter);
+    if (!letter) {
+      setMessage({
+        type: "warning",
+        message: "Please enter a letter!",
+      });
+    }
+    if (lettersSet.indexOf(letter!) === -1) {
+      setLettersSet([...lettersSet, letter!]);
+    }
+    if (lettersSet.indexOf(letter!) !== -1) {
+      setMessage({
+        type: "information",
+        message: "You entered that letter already",
+      });
+    }
+    if (
+      playedWordGame.indexOf(letter!) !== -1 &&
+      lettersSet.indexOf(letter!) === -1
+    ) {
+      setLetterExist((prevState) => prevState + 1);
+      setMessage({
+        type: "information",
+        message: `The letter '${letter}' exist in the guessed word!`,
+      });
+      setEvaluateLetterResponse((prevState) => [...prevState, "Y"]);
+    } else if (
+      playedWordGame.indexOf(letter!) === -1 &&
+      lettersSet.indexOf(letter!) === -1
+    ) {
+      setLetterErrors((prevState) => prevState + 1);
+      setMessage({
+        type: "warning",
+        message: `The letter '${letter}' does not exist in the guessed word!`,
+      });
+      setEvaluateLetterResponse((prevState) => [...prevState, "X"]);
+    }
+
+    if (letterErrors === 3) {
+      setMessage({
+        type: "warning",
+        message: "You reached the maximum mistakes!",
+      });
+    }
+
+    if (letterExist === maxLetterExist) {
+      setMessage({
+        type: "information",
+        message: `You reached the maximum number of correct answers ${maxLetterExist}!`,
+      });
+    }
+
+    event.currentTarget.reset();
+  };
+  return (
+    <form onSubmit={handleOnGuessLetter} className="form-layout">
+      <label htmlFor="letter">Guess Letter</label>
+      <input
+        type="text"
+        id="letter"
+        name="letter"
+        ref={guessLetter}
+        maxLength={1}
+        disabled={
+          letterErrors === 3
+            ? true
+            : false || letterExist === maxLetterExist
+            ? true
+            : maxWordAttempts === wordErrors
+            ? true
+            : false
+        }
+        className="letter-input"
+      />
+      <button
+        disabled={
+          letterErrors === 3
+            ? true
+            : false || letterExist === maxLetterExist
+            ? true
+            : maxWordAttempts === wordErrors
+            ? true
+            : false
+        }
+      >
+        <span>Send</span>
+      </button>
+    </form>
+  );
+};

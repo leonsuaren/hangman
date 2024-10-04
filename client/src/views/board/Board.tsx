@@ -18,12 +18,12 @@ import {
 } from "../../utils/words";
 
 import "./board.css";
+import { LetterForm } from "../../components/letter-form/LetterForm";
 
 const Board: FC = () => {
   const gameContext = useContext(GameContext);
   const playedWord = gameContext.playedWord;
   const level = gameContext.level;
-  const playedWordGame = [...playedWord];
   const [letter, setLetter] = useState<string | undefined>("");
   //handle the letter
   const [letterErrors, setLetterErrors] = useState<number>(0);
@@ -33,13 +33,13 @@ const Board: FC = () => {
   const [evaluateLetterResponse, setEvaluateLetterResponse] = useState<
     string[]
   >([]);
-  const guessLetter = useRef<HTMLInputElement>(null);
+  const [guessLetter, setGuessLetter] = useState<string | undefined>('');
   //handle the letter
   //handle the word
   const guessWord = useRef<HTMLInputElement>(null);
   const [maxWordAttempts, setMaxWordAttempts] = useState<number>(1);
   const [wordErrors, setwordErrors] = useState<number>(0);
-  const [guessedWord, setGuessedWord] = useState<string | undefined>('');
+  const [guessedWord, setGuessedWord] = useState<string | undefined>("");
   //handle the word
   //reset word
   let randomWord: number = Math.floor(Math.random() * 29);
@@ -54,12 +54,11 @@ const Board: FC = () => {
     if (message.type === "information" || "warning" || "success" || "fail") {
       cleanMessage = setTimeout(() => {
         setMessage({
-          type: ' ',
-          message: ' '
+          type: " ",
+          message: " ",
         });
       }, 3000);
     }
-
     if (level === "Medium") {
       setMaxLetterExist(3);
       setMaxWordAttempts(2);
@@ -69,68 +68,8 @@ const Board: FC = () => {
       setMaxLetterExist(4);
       setMaxWordAttempts(3);
     }
-
-    if (letterErrors === 3) {
-      setMessage({
-        type: "warning",
-        message: "You reached the maximum mistakes!",
-      });
-    }
-
-    if (letterExist === maxLetterExist) {
-      setMessage({
-        type: "information",
-        message: `You reached the maximum number of correct answers ${maxLetterExist}!`,
-      });
-    }
-    
     return () => clearTimeout(cleanMessage);
-
-  }, [letterErrors, letterExist, lettersSet]);
-
-  const handleOnGuessLetter = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    let letter = guessLetter.current?.value;
-    setLetter(letter);
-    if (!letter) {
-      setMessage({
-        type: "warning",
-        message: "Please enter a letter!"
-      });
-    }
-    if (lettersSet.indexOf(letter!) === -1) {
-      setLettersSet([...lettersSet, letter!]);
-    }
-    if (lettersSet.indexOf(letter!) !== -1) {
-      setMessage({
-        type: "information",
-        message: "You entered that letter already",
-      });
-    }
-    if (
-      playedWordGame.indexOf(letter!) !== -1 &&
-      lettersSet.indexOf(letter!) === -1
-    ) {
-      setLetterExist((prevState) => prevState + 1);
-      setMessage({
-        type: "information",
-        message: `The letter '${letter}' exist in the guessed word!`,
-      });
-      setEvaluateLetterResponse((prevState) => [...prevState, "Y"]);
-    } else if (
-      playedWordGame.indexOf(letter!) === -1 &&
-      lettersSet.indexOf(letter!) === -1
-    ) {
-      setLetterErrors((prevState) => prevState + 1);
-      setMessage({
-        type: "warning",
-        message: `The letter '${letter}' does not exist in the guessed word!`,
-      });
-      setEvaluateLetterResponse((prevState) => [...prevState, "X"]);
-    }
-
-    event.currentTarget.reset();
-  };
+  }, [letterErrors, letterExist]);
 
   const handleOnGuessWord = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -156,21 +95,22 @@ const Board: FC = () => {
       setMessage({ type: "fail", message: "Game Over" });
     }
     if (maxWordAttempts >= 2 && level === "Easy") {
-      setMessage
+      setMessage;
     }
     event.currentTarget.reset();
   };
-  // console.log("Board", {
-  //   level: level,
-  //   playedWord: playedWord,
-  //   letterErrors: letterErrors,
-  //   letterExist: letterExist,
-  //   letterSet: lettersSet,
-  //   message: message,
-  //   evaluateLetterResponse: evaluateLetterResponse,
-  //   maxWordAttempts: maxWordAttempts,
-  //   wordErrors: wordErrors,
-  // });
+  console.log("Board", {
+    level: level,
+    playedWord: playedWord,
+    letterErrors: letterErrors,
+    letterExist: letterExist,
+    letterSet: lettersSet,
+    message: message,
+    evaluateLetterResponse: evaluateLetterResponse,
+    maxWordAttempts: maxWordAttempts,
+    wordErrors: wordErrors,
+    guessLetter: guessLetter
+  });
 
   const handleOnRestartGame = () => {
     gameContext.handleOnSelectLevel(" ");
@@ -188,9 +128,9 @@ const Board: FC = () => {
     setLettersSet([]);
     setEvaluateLetterResponse([]);
     setMaxWordAttempts(0);
-    setGuessedWord('');
+    setGuessedWord("");
     gameContext.setResetGame(0);
-  }
+  };
 
   const handleOnResetLevel = () => {
     if (level === "Easy") {
@@ -207,8 +147,8 @@ const Board: FC = () => {
     setLettersSet([]);
     setEvaluateLetterResponse([]);
     setMaxWordAttempts(0);
-    setGuessedWord('');
-    gameContext.setResetGame(prevState => prevState + 1);
+    setGuessedWord("");
+    gameContext.setResetGame((prevState) => prevState + 1);
   };
 
   return (
@@ -248,42 +188,24 @@ const Board: FC = () => {
           </button>
         </div>
         <div className="guess-word">
-          <WordSetDisplay letter={letter!} word={guessedWord!}/>
+          <WordSetDisplay letter={letter!} word={guessedWord!} />
         </div>
         <section className="guess-letter-form guess-letter-layout">
-          <form onSubmit={handleOnGuessLetter} className="form-layout">
-            <label htmlFor="letter">Guess Letter</label>
-            <input
-              type="text"
-              id="letter"
-              name="letter"
-              ref={guessLetter}
-              maxLength={1}
-              disabled={
-                letterErrors === 3
-                  ? true
-                  : false || letterExist === maxLetterExist
-                  ? true
-                  : maxWordAttempts === wordErrors
-                  ? true
-                  : false
-              }
-              className="letter-input"
-            />
-            <button
-              disabled={
-                letterErrors === 3
-                  ? true
-                  : false || letterExist === maxLetterExist
-                  ? true
-                  : maxWordAttempts === wordErrors
-                  ? true
-                  : false
-              }
-            >
-              <span>Send</span>
-            </button>
-          </form>
+          <LetterForm
+            letterErrors={letterErrors}
+            letterExist={letterExist}
+            maxWordAttempts={maxWordAttempts}
+            wordErrors={wordErrors}
+            maxLetterExist={maxLetterExist}
+            setGuessLetter={setGuessLetter}
+            setLetter={setLetter}
+            setLetterErrors={setLetterErrors}
+            setLetterExist={setLetterExist}
+            setMessage={setMessage}
+            setEvaluateLetterResponse={setEvaluateLetterResponse}
+            setLettersSet={setLettersSet}
+            lettersSet={lettersSet}
+          />
           <div className="errors-and-correct">
             {evaluateLetterResponse.map((response, key) => {
               if (response === "X") {

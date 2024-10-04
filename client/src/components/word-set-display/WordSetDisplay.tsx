@@ -30,10 +30,10 @@ const WordSetDisplay: FC<WordSetDisplayProps> = ({ letter, word }) => {
       }
     });
     setNewWordSet(wordSetHolder);
-    console.log("useEffect Word Display", {wordSetHolder: wordSetHolder});
   }, [givenLetter, word]);
 
   console.log("Word Display", {
+    letter: letter,
     playedWord: playedWord,
     word: word,
     newWordSet: newWordSet
