@@ -1,7 +1,5 @@
 import {
   type FC,
-  type FormEvent,
-  useRef,
   useState,
   useEffect,
   useContext,
@@ -19,6 +17,7 @@ import {
 
 import "./board.css";
 import { LetterForm } from "../../components/letter-form/LetterForm";
+import { WordForm } from "../../components/word-form/WordForm";
 
 const Board: FC = () => {
   const gameContext = useContext(GameContext);
@@ -30,14 +29,11 @@ const Board: FC = () => {
   const [letterExist, setLetterExist] = useState<number>(0);
   const [lettersSet, setLettersSet] = useState<string[]>([]);
   const [maxLetterExist, setMaxLetterExist] = useState<number>(2);
-  const [evaluateLetterResponse, setEvaluateLetterResponse] = useState<
-    string[]
-  >([]);
+  const [evaluateLetterResponse, setEvaluateLetterResponse] = useState<string[]>([]);
   //handle the letter
   //handle the word
-  const guessWord = useRef<HTMLInputElement>(null);
   const [maxWordAttempts, setMaxWordAttempts] = useState<number>(1);
-  const [wordErrors, setwordErrors] = useState<number>(0);
+  const [wordErrors, setWordErrors] = useState<number>(0);
   const [guessedWord, setGuessedWord] = useState<string | undefined>("");
   //handle the word
   //reset word
@@ -70,34 +66,6 @@ const Board: FC = () => {
     return () => clearTimeout(cleanMessage);
   }, [message]);
 
-  const handleOnGuessWord = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    let word = guessWord.current?.value;
-    setGuessedWord(word);
-    if (!word) {
-      setMessage({
-        type: "warning",
-        message: "Please enter a word!",
-      });
-    } else if (word) {
-      setMaxWordAttempts((prevState) => prevState + 1);
-    }
-    if (word === playedWord) {
-      setMessage({
-        type: "success",
-        message: "Congratulations you guessed the word",
-      });
-    } else {
-      setwordErrors((prevState) => prevState + 1);
-    }
-    if (maxWordAttempts === wordErrors) {
-      setMessage({ type: "fail", message: "Game Over" });
-    }
-    if (maxWordAttempts >= 2 && level === "Easy") {
-      setMessage;
-    }
-    event.currentTarget.reset();
-  };
   console.log("Board", {
     level: level,
     playedWord: playedWord,
@@ -222,49 +190,16 @@ const Board: FC = () => {
           </div>
         </section>
         <section className="guess-word-form">
-          <form onSubmit={handleOnGuessWord}>
-            <label htmlFor="letter">Guess the Word</label>
-            <input
-              className="guess-letter-input"
-              type="text"
-              name="word"
-              ref={guessWord}
-              disabled={
-                letterExist === 0 && letterErrors === 0
-                  ? true
-                  : letterExist === 0 && letterErrors === 1
-                  ? false
-                  : letterExist === 1 && letterErrors === 0
-                  ? false
-                  : maxWordAttempts >= 2 && level === "Easy"
-                  ? true
-                  : maxWordAttempts >= 3 && level === "Medium"
-                  ? true
-                  : maxWordAttempts === 3 && level === "Difficult"
-                  ? true
-                  : false
-              }
-            />
-            <button
-              disabled={
-                letterExist === 0 && letterErrors === 0
-                  ? true
-                  : letterExist === 0 && letterErrors === 1
-                  ? false
-                  : letterExist === 1 && letterErrors === 0
-                  ? false
-                  : maxWordAttempts >= 2 && level === "Easy"
-                  ? true
-                  : maxWordAttempts >= 3 && level === "Medium"
-                  ? true
-                  : maxWordAttempts === 3 && level === "Difficult"
-                  ? true
-                  : false
-              }
-            >
-              <span>Good Lock!</span>
-            </button>
-          </form>
+          <WordForm
+            setGuessedWord={setGuessedWord}
+            setMaxWordAttempts={setMaxWordAttempts}
+            setMessage={setMessage}
+            setWordErrors={setWordErrors}
+            maxWordAttempts={maxWordAttempts}
+            wordErrors={wordErrors}
+            letterExist={letterExist}
+            letterErrors={letterErrors}
+          />
         </section>
         <div className="messages">
           <div
