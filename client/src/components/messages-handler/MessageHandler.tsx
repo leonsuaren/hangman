@@ -19,17 +19,17 @@ export const MessageHandler: FC<MessageHandlerProps> = ({
   message,
   setMessage,
 }) => {
-  useEffect(() => {
-    const cleanMessage = setTimeout(() => {
-      setMessage({
-        type: " ",
-        message: " ",
-      });
-    }, 3000);
-    return () => {
-      clearTimeout(cleanMessage);
-    };
-  }, [message]);
+  // useEffect(() => {
+  //   const cleanMessage = setTimeout(() => {
+  //     setMessage({
+  //       type: " ",
+  //       message: " ",
+  //     });
+  //   }, 3000);
+  //   return () => {
+  //     clearTimeout(cleanMessage);
+  //   };
+  // }, [message]);
 
   return (
     <div className="messages">

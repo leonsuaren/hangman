@@ -13,8 +13,6 @@ type LetterFormProps = {
   letterErrors: number;
   letterExist: number;
   maxLetterExist: number;
-  maxWordAttempts: number;
-  wordErrors: number;
   lettersSet: string[];
   setLetter: Dispatch<SetStateAction<any>>;
   setMessage: Dispatch<
@@ -33,8 +31,6 @@ export const LetterForm: FC<LetterFormProps> = ({
   letterErrors,
   letterExist,
   maxLetterExist,
-  maxWordAttempts,
-  wordErrors,
   lettersSet,
   setLetter,
   setMessage,
@@ -45,6 +41,7 @@ export const LetterForm: FC<LetterFormProps> = ({
 }) => {
   const gameContext = useContext(GameContext);
   const playedWord = gameContext.playedWord;
+  const level = gameContext.level;
   const guessLetter = useRef<HTMLInputElement>(null);
   const playedWordGame = [...playedWord];
 
@@ -120,25 +117,37 @@ export const LetterForm: FC<LetterFormProps> = ({
         ref={guessLetter}
         maxLength={1}
         disabled={
-          letterErrors === 3
-            ? true
-            : false || letterExist === maxLetterExist
-            ? true
-            : maxWordAttempts === wordErrors
-            ? true
-            : false
+          letterExist === 2 && level === "Easy"
+          ? true
+          : letterErrors === 2 && level === "Easy"
+          ? true
+          : letterExist === 3 && level === "Medium"
+          ? true
+          : letterErrors === 4 && level === "Medium"
+          ? true
+          : letterExist === 3 && level === "Difficult"
+          ? true
+          : letterErrors === 3 && level === "Difficult"
+          ? true
+          : false
         }
         className="letter-input"
       />
       <button
         disabled={
-          letterErrors === 3
-            ? true
-            : false || letterExist === maxLetterExist
-            ? true
-            : maxWordAttempts === wordErrors
-            ? true
-            : false
+          letterExist === 2 && level === "Easy"
+          ? true
+          : letterErrors === 2 && level === "Easy"
+          ? true
+          : letterExist === 3 && level === "Medium"
+          ? true
+          : letterErrors === 4 && level === "Medium"
+          ? true
+          : letterExist === 3 && level === "Difficult"
+          ? true
+          : letterErrors === 3 && level === "Difficult"
+          ? true
+          : false
         }
       >
         <span>Send</span>

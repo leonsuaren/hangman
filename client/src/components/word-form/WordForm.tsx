@@ -84,11 +84,11 @@ export const WordForm: FC<WordFormProps> = ({
             ? false
             : letterExist === 1 && letterErrors === 0
             ? false
-            : maxWordAttempts >= 2 && level === "Easy"
+            : maxWordAttempts <= 2 && level === "Easy"
             ? true
-            : maxWordAttempts >= 3 && level === "Medium"
+            : maxWordAttempts <= 3 && level === "Medium"
             ? true
-            : maxWordAttempts === 3 && level === "Difficult"
+            : maxWordAttempts <= 3 && level === "Difficult"
             ? true
             : false
         }
@@ -101,11 +101,11 @@ export const WordForm: FC<WordFormProps> = ({
             ? false
             : letterExist === 1 && letterErrors === 0
             ? false
-            : maxWordAttempts >= 2 && level === "Easy"
+            : maxWordAttempts <= 2 && level === "Easy"
             ? true
-            : maxWordAttempts >= 3 && level === "Medium"
+            : maxWordAttempts <= 3 && level === "Medium"
             ? true
-            : maxWordAttempts === 3 && level === "Difficult"
+            : maxWordAttempts <= 3 && level === "Difficult"
             ? true
             : false
         }

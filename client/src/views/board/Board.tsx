@@ -25,10 +25,12 @@ const Board: FC = () => {
   const level = gameContext.level;
   //handle the letter
   const [letter, setLetter] = useState<string | undefined>(""); //letra que introduce el usuario
+  const [lettersSet, setLettersSet] = useState<string[]>([]);// set de letras que ingresa el usuario
+
   const [letterErrors, setLetterErrors] = useState<number>(0); //numero de letras incorrectas introducidas
   const [letterExist, setLetterExist] = useState<number>(0);// numero de letras correctas introducidas
-  const [lettersSet, setLettersSet] = useState<string[]>([]);// set de letras que ingresa el usuario
   const [maxLetterExist, setMaxLetterExist] = useState<number>(2);//maximo de letras correctas permitidas
+
   const [evaluateLetterResponse, setEvaluateLetterResponse] = useState<string[]>([]); //set de "Y" y "X" para mostrar al usuario letras correctas e incorrectas
   //handle the letter
   //handle the word
@@ -51,22 +53,21 @@ const Board: FC = () => {
     }
 
     if (level === "Difficult") {
-      setMaxLetterExist(4);
+      setMaxLetterExist(3);
       setMaxWordAttempts(3);
     }
   }, []);
 
-  // console.log("Board", {
-  //   level: level,
-  //   playedWord: playedWord,
-  //   letterErrors: letterErrors,
-  //   letterExist: letterExist,
-  //   letterSet: lettersSet,
-  //   message: message,
-  //   evaluateLetterResponse: evaluateLetterResponse,
-  //   maxWordAttempts: maxWordAttempts,
-  //   wordErrors: wordErrors,
-  // });
+  console.log("Board", {
+    level: level,
+    letterErrors: letterErrors,
+    letterExist: letterExist,
+    letterSet: lettersSet,
+    message: message,
+    evaluateLetterResponse: evaluateLetterResponse,
+    maxWordAttempts: maxWordAttempts,
+    wordErrors: wordErrors,
+  });
 
   const handleOnRestartGame = () => {
     gameContext.handleOnSelectLevel(" ");
@@ -123,19 +124,19 @@ const Board: FC = () => {
           <button
             onClick={handleOnResetLevel}
             disabled={
-              letterExist >= 2 && level === "Easy"
+              letterExist === 2 && level === "Easy"
                 ? true
-                : letterErrors >= 2 && level === "Easy"
+                : letterErrors === 2 && level === "Easy"
                 ? true
-                : letterExist >= 3 && level === "Medium"
+                : letterExist === 3 && level === "Medium"
                 ? true
-                : letterErrors >= 3 && level === "Medium"
+                : letterErrors === 4 && level === "Medium"
                 ? true
-                : letterExist >= 3 && level === "Difficult"
+                : letterExist === 3 && level === "Difficult"
                 ? true
-                : letterErrors >= 3 && level === "Difficult"
+                : letterErrors === 3 && level === "Difficult"
                 ? true
-                : gameContext.resetGame >= 2
+                : gameContext.resetGame === 2
                 ? true
                 : false
             }
@@ -150,8 +151,6 @@ const Board: FC = () => {
           <LetterForm
             letterErrors={letterErrors}
             letterExist={letterExist}
-            maxWordAttempts={maxWordAttempts}
-            wordErrors={wordErrors}
             maxLetterExist={maxLetterExist}
             setLetter={setLetter}
             setLetterErrors={setLetterErrors}
