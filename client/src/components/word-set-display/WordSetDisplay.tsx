@@ -6,10 +6,9 @@ import useCreateEmptyArray from "../../utils/useCreateEmptyArray.ts";
 type WordSetDisplayProps = {
   letter: string;
   word: string;
-  letterSet: string[]
 };
 
-const WordSetDisplay: FC<WordSetDisplayProps> = ({ letter, word, letterSet }) => {
+const WordSetDisplay: FC<WordSetDisplayProps> = ({ letter, word }) => {
   const gameContext = useContext(GameContext);
   //create an empty array
   const playedWord = gameContext.playedWord;
@@ -18,11 +17,10 @@ const WordSetDisplay: FC<WordSetDisplayProps> = ({ letter, word, letterSet }) =>
   let newWordSetArray = useCreateEmptyArray(playedWordLength);
   //create an empty array
   const [newWordSet, setNewWordSet] = useState<string[]>(newWordSetArray);
-  let wordSetHolder: string[] = newWordSetArray;
 
   useEffect(() => {
     if (playedWord === word) {
-      wordSetHolder = wordSet;
+      newWordSetArray = wordSet;
     }
     wordSet.forEach((el, index) => {
       if (el === letter) {
@@ -30,15 +28,14 @@ const WordSetDisplay: FC<WordSetDisplayProps> = ({ letter, word, letterSet }) =>
       }
     });
     setNewWordSet(newWordSet);
-  }, [letter, word]);
+  }, [letter, word, newWordSet]);
 
   console.log("Word Display", {
     letter: letter,
     playedWord: playedWord,
     word: word,
     newWordSet: newWordSet,
-    wordSetHolder: wordSetHolder,
-    letterSet: letterSet
+    newWordSetArray: newWordSetArray,
   });
   return (
     <div className="word-set-wrapper">

@@ -153,7 +153,7 @@ const Board: FC = () => {
           </button>
         </div>
         <div className="guess-word">
-          <WordSetDisplay letter={letter!} word={guessedWord!} letterSet={lettersSet} />
+          <WordSetDisplay letter={letter!} word={guessedWord!} />
         </div>
         <section className="guess-letter-form guess-letter-layout">
           <LetterForm
