@@ -6,9 +6,10 @@ import useCreateEmptyArray from "../../utils/useCreateEmptyArray.ts";
 type WordSetDisplayProps = {
   letter: string;
   word: string;
+  letterSet: string[]
 };
 
-const WordSetDisplay: FC<WordSetDisplayProps> = ({ letter, word }) => {
+const WordSetDisplay: FC<WordSetDisplayProps> = ({ letter, word, letterSet }) => {
   const gameContext = useContext(GameContext);
   //create an empty array
   const playedWord = gameContext.playedWord;
@@ -16,27 +17,28 @@ const WordSetDisplay: FC<WordSetDisplayProps> = ({ letter, word }) => {
   const wordSet = [...playedWord];
   let newWordSetArray = useCreateEmptyArray(playedWordLength);
   //create an empty array
-  let givenLetter: string | undefined = letter; //Find a solution
   const [newWordSet, setNewWordSet] = useState<string[]>(newWordSetArray);
+  let wordSetHolder: string[] = newWordSetArray;
 
   useEffect(() => {
-    let wordSetHolder: string[] = newWordSetArray;
     if (playedWord === word) {
       wordSetHolder = wordSet;
     }
     wordSet.forEach((el, index) => {
       if (el === letter) {
-        wordSetHolder[index] = letter;
+        newWordSet[index] = letter;
       }
     });
-    setNewWordSet(wordSetHolder);
-  }, [givenLetter, word]);
+    setNewWordSet(newWordSet);
+  }, [letter, word]);
 
   console.log("Word Display", {
     letter: letter,
     playedWord: playedWord,
     word: word,
-    newWordSet: newWordSet
+    newWordSet: newWordSet,
+    wordSetHolder: wordSetHolder,
+    letterSet: letterSet
   });
   return (
     <div className="word-set-wrapper">

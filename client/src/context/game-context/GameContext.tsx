@@ -1,4 +1,4 @@
-import { type ReactNode, createContext, useState, useEffect, Dispatch, SetStateAction } from 'react';
+import { type ReactNode, createContext, useState, Dispatch, SetStateAction } from 'react';
 
 import { WordsLevelEasy, WordsLevelMedium, WordsLevelDifficult } from '../../utils/words.ts';
 
@@ -36,7 +36,8 @@ const GameContextProvider = ({ children }: GameContextProviderProps) => {
   const playedWordSet = [...playedWord]
   let randomWord: number = Math.floor(Math.random() * 29);
 
-  useEffect(() => {
+  const handleOnSelectLevel = (level: string) => {
+    setLevel(level)
     if (level === "Easy") {
       setPlayedWord(WordsLevelEasy[randomWord]);
     } else if (level === "Medium") {
@@ -44,9 +45,7 @@ const GameContextProvider = ({ children }: GameContextProviderProps) => {
     } else if (level === "Difficult") {
       setPlayedWord(WordsLevelDifficult[randomWord]);
     }
-  }, [level]);
-
-  const handleOnSelectLevel = (level: string) => setLevel(level);
+  };
 
   // console.log("Context", {
   //   level: level,

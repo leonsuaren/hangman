@@ -26,7 +26,7 @@ type LetterFormProps = {
   setLetterExist: Dispatch<SetStateAction<number>>;
   setLetterErrors: Dispatch<SetStateAction<number>>;
   setEvaluateLetterResponse: Dispatch<SetStateAction<string[]>>;
-  setLettersSet: Dispatch<SetStateAction<string[]>>
+  setLettersSet: Dispatch<SetStateAction<string[]>>;
 };
 
 export const LetterForm: FC<LetterFormProps> = ({
@@ -41,18 +41,16 @@ export const LetterForm: FC<LetterFormProps> = ({
   setLetterExist,
   setLetterErrors,
   setEvaluateLetterResponse,
-  setLettersSet
+  setLettersSet,
 }) => {
   const gameContext = useContext(GameContext);
-  const guessLetter = useRef<HTMLInputElement>(null);
   const playedWord = gameContext.playedWord;
+  const guessLetter = useRef<HTMLInputElement>(null);
   const playedWordGame = [...playedWord];
-
-  console.log("letter form", { letterErrors: letterErrors, playedWord: playedWord });
 
   const handleOnGuessLetter = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    let letter = guessLetter.current?.value;
+    let letter: string | any = guessLetter.current?.value;
     setLetter(letter);
     if (!letter) {
       setMessage({
@@ -60,18 +58,18 @@ export const LetterForm: FC<LetterFormProps> = ({
         message: "Please enter a letter!",
       });
     }
-    if (lettersSet.indexOf(letter!) === -1) {
+    if (lettersSet.indexOf(letter) === -1) {
       setLettersSet([...lettersSet, letter!]);
     }
-    if (lettersSet.indexOf(letter!) !== -1) {
+    if (lettersSet.indexOf(letter) !== -1) {
       setMessage({
         type: "information",
         message: "You entered that letter already",
       });
     }
     if (
-      playedWordGame.indexOf(letter!) !== -1 &&
-      lettersSet.indexOf(letter!) === -1
+      playedWordGame.indexOf(letter) !== -1 &&
+      lettersSet.indexOf(letter) === -1
     ) {
       setLetterExist((prevState) => prevState + 1);
       setMessage({
@@ -107,6 +105,11 @@ export const LetterForm: FC<LetterFormProps> = ({
 
     event.currentTarget.reset();
   };
+  // console.log("letter form", {
+  //   letterErrors: letterErrors,
+  //   playedWord: playedWord,
+  //   lettersSet: lettersSet
+  // });
   return (
     <form onSubmit={handleOnGuessLetter} className="form-layout">
       <label htmlFor="letter">Guess Letter</label>
