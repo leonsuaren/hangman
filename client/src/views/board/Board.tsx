@@ -21,7 +21,6 @@ import { WordForm } from "../../components/word-form/WordForm";
 
 const Board: FC = () => {
   const gameContext = useContext(GameContext);
-  const playedWord = gameContext.playedWord;
   const level = gameContext.level;
   //handle the letter
   const [letter, setLetter] = useState<string | undefined>(""); //letra que introduce el usuario
