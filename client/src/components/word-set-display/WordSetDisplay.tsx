@@ -3,6 +3,8 @@ import { useEffect, useState, useContext, type FC } from "react";
 import { GameContext } from "../../context/game-context/GameContext.tsx";
 import useCreateEmptyArray from "../../utils/useCreateEmptyArray.ts";
 
+import './word-set-display.css';
+
 type WordSetDisplayProps = {
   letter: string;
   word: string;

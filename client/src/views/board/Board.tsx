@@ -18,6 +18,7 @@ import {
 import "./board.css";
 import { LetterForm } from "../../components/letter-form/LetterForm";
 import { WordForm } from "../../components/word-form/WordForm";
+import { MessageHandler } from "../../components/messages-handler/MessageHandler";
 
 const Board: FC = () => {
   const gameContext = useContext(GameContext);
@@ -44,15 +45,6 @@ const Board: FC = () => {
   });
 
   useEffect(() => {
-    // let cleanMessage: any;
-    // if (message.type === "information" || "warning" || "success" || "fail") {
-    //   cleanMessage = setTimeout(() => {
-    //     setMessage({
-    //       type: " ",
-    //       message: " ",
-    //     });
-    //   }, 3000);
-    // }
     if (level === "Medium") {
       setMaxLetterExist(3);
       setMaxWordAttempts(2);
@@ -62,8 +54,7 @@ const Board: FC = () => {
       setMaxLetterExist(4);
       setMaxWordAttempts(3);
     }
-    // return () => clearTimeout(cleanMessage);
-  }, [message]);
+  }, []);
 
   // console.log("Board", {
   //   level: level,
@@ -200,23 +191,7 @@ const Board: FC = () => {
             letterErrors={letterErrors}
           />
         </section>
-        <div className="messages">
-          <div
-            className={
-              message.type === "information"
-                ? "information-message"
-                : message.type === "warning"
-                ? "warning-message"
-                : message.type === "success"
-                ? "success-message"
-                : message.type === "fail"
-                ? "game-over-message"
-                : "default"
-            }
-          >
-            <p>{message.message}</p>
-          </div>
-        </div>
+          <MessageHandler message={{type: message.type, message: message.message}} setMessage={setMessage}/>
         <div className="statistics">
           <h2>Estatistics</h2>
         </div>
