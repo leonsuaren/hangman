@@ -1,6 +1,7 @@
 import { type ReactNode, createContext, useState, Dispatch, SetStateAction } from 'react';
 
 import { WordsLevelEasy, WordsLevelMedium, WordsLevelDifficult } from '../../utils/words.ts';
+import useCreateEmptyArray from '../../utils/useCreateEmptyArray.ts';
 
 
 type GameContextProps = {
@@ -9,9 +10,12 @@ type GameContextProps = {
   playedWord: string;
   level: string;
   resetGame: number;
+  newWordSet: string[];
+  newWordSetArray: string[];
   setPlayedWord: Dispatch<SetStateAction<any>>;
   setLevel: Dispatch<SetStateAction<any>>;
   setResetGame: Dispatch<SetStateAction<number>>;
+  setNewWordSet: Dispatch<SetStateAction<string[]>>;
 }
 
 export const GameContext = createContext<GameContextProps>({
@@ -20,9 +24,12 @@ export const GameContext = createContext<GameContextProps>({
   playedWord: '',
   level: '',
   resetGame: 0,
+  newWordSet: [],
+  newWordSetArray: [],
   setPlayedWord: () => {},
   setLevel: () => {},
-  setResetGame: () => {}
+  setResetGame: () => {},
+  setNewWordSet: () => {}
 });
 
 type GameContextProviderProps = {
@@ -36,6 +43,13 @@ const GameContextProvider = ({ children }: GameContextProviderProps) => {
   const playedWordSet = [...playedWord]
   let randomWord: number = Math.floor(Math.random() * 29);
 
+  /* Handle Word Set Display */
+  const playedWordLength = playedWord.length;
+  let newWordSetArray = useCreateEmptyArray(playedWordLength);
+  const [newWordSet, setNewWordSet] = useState<string[]>(newWordSetArray);
+  /* Handle Word Set Display */
+
+
   const handleOnSelectLevel = (level: string) => {
     setLevel(level)
     if (level === "Easy") {
@@ -47,15 +61,16 @@ const GameContextProvider = ({ children }: GameContextProviderProps) => {
     }
   };
 
-  // console.log("Context", {
-  //   level: level,
-  //   playedWord: playedWord,
-  //   playedWordSet: playedWordSet,
-  //   resetGame: resetGame
-  // })
+  console.log("Context", {
+    level: level,
+    playedWord: playedWord,
+    playedWordSet: playedWordSet,
+    resetGame: resetGame,
+    newWordSetArray: newWordSetArray
+  })
 
   return (
-    <GameContext.Provider value={{playedWordSet, playedWord, level, resetGame, handleOnSelectLevel, setPlayedWord, setLevel, setResetGame}}>
+    <GameContext.Provider value={{playedWordSet, playedWord, level, resetGame, newWordSet, newWordSetArray, handleOnSelectLevel, setPlayedWord, setLevel, setResetGame, setNewWordSet}}>
       {children}
     </GameContext.Provider>
   )

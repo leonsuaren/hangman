@@ -34,7 +34,7 @@ const Board: FC = () => {
   const [evaluateLetterResponse, setEvaluateLetterResponse] = useState<string[]>([]); //set de "Y" y "X" para mostrar al usuario letras correctas e incorrectas
   //handle the letter
   //handle the word
-  const [maxWordAttempts, setMaxWordAttempts] = useState<number>(2);
+  const [maxWordAttempts, setMaxWordAttempts] = useState<number>(0);
   const [wordErrors, setWordErrors] = useState<number>(0);
   const [guessedWord, setGuessedWord] = useState<string | undefined>("");
   //handle the word

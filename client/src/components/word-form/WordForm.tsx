@@ -69,6 +69,13 @@ export const WordForm: FC<WordFormProps> = ({
     event.currentTarget.reset();
   };
 
+  console.log('Word Form', {
+    maxWordAttempts: maxWordAttempts,
+    letterErrors: letterErrors,
+    letterExist: letterExist,
+    level: level
+  });
+
   return (
     <form onSubmit={handleOnGuessWord}>
       <label htmlFor="letter">Guess the Word</label>
@@ -78,34 +85,28 @@ export const WordForm: FC<WordFormProps> = ({
         name="word"
         ref={guessWord}
         disabled={
-          letterExist === 0 && letterErrors === 0
-            ? true
-            : letterExist === 0 && letterErrors === 1
+             letterExist >= 1 || letterErrors >= 1
             ? false
-            : letterExist === 1 && letterErrors === 0
-            ? false
-            : maxWordAttempts <= 2 && level === "Easy"
+            : maxWordAttempts === 2 && level === 'Easy'
             ? true
-            : maxWordAttempts <= 3 && level === "Medium"
-            ? true
-            : maxWordAttempts <= 3 && level === "Difficult"
-            ? true
-            : false
+            // : maxWordAttempts === 3 && level === "Medium"
+            // ? true
+            // : maxWordAttempts === 3 && level === "Difficult"
+            // ? true
+            : true
         }
       />
       <button
         disabled={
           letterExist === 0 && letterErrors === 0
             ? true
-            : letterExist === 0 && letterErrors === 1
+            : letterExist === 1 || letterErrors === 1
             ? false
-            : letterExist === 1 && letterErrors === 0
-            ? false
-            : maxWordAttempts <= 2 && level === "Easy"
+            : maxWordAttempts === 2 && level === "Easy"
             ? true
-            : maxWordAttempts <= 3 && level === "Medium"
+            : maxWordAttempts === 3 && level === "Medium"
             ? true
-            : maxWordAttempts <= 3 && level === "Difficult"
+            : maxWordAttempts === 3 && level === "Difficult"
             ? true
             : false
         }

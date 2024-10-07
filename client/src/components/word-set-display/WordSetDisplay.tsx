@@ -32,13 +32,13 @@ const WordSetDisplay: FC<WordSetDisplayProps> = ({ letter, word }) => {
     setNewWordSet(newWordSet);
   }, [letter, word, newWordSet]);
 
-  // console.log("Word Display", {
-  //   letter: letter,
-  //   playedWord: playedWord,
-  //   word: word,
-  //   newWordSet: newWordSet,
-  //   newWordSetArray: newWordSetArray,
-  // });
+  console.log("Word Display", {
+    letter: letter,
+    playedWord: playedWord,
+    word: word,
+    newWordSet: newWordSet,
+    newWordSetArray: newWordSetArray,
+  });
   return (
     <div className="word-set-wrapper">
       <div className="word-set-letter">

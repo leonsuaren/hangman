@@ -102,11 +102,12 @@ export const LetterForm: FC<LetterFormProps> = ({
 
     event.currentTarget.reset();
   };
-  // console.log("letter form", {
-  //   letterErrors: letterErrors,
-  //   playedWord: playedWord,
-  //   lettersSet: lettersSet
-  // });
+  console.log("letter form", {
+    letterErrors: letterErrors,
+    letterExist: letterExist,
+    playedWord: playedWord,
+    lettersSet: lettersSet
+  });
   return (
     <form onSubmit={handleOnGuessLetter} className="form-layout">
       <label htmlFor="letter">Guess Letter</label>
